@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>社労士マスター</title>
+<style>
+:root{
+  --bg:#f7f6f2;--bg2:#ffffff;--bg3:#eeece6;--bg4:#e5e3da;
+  --text:#18171a;--text2:#6b6868;--text3:#a09e9a;
+  --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.15);
+  --blue:#2563eb;--blue-bg:#eff6ff;--blue-light:#dbeafe;
+  --green:#16a34a;--green-bg:#f0fdf4;--green-light:#bbf7d0;
+  --red:#dc2626;--red-bg:#fef2f2;--red-light:#fecaca;
+  --amber:#d97706;--amber-bg:#fffbeb;--amber-light:#fde68a;
+  --purple:#7c3aed;--purple-bg:#f5f3ff;
+  --nav-h:64px;--r:14px;--r-sm:10px;
+  --shadow:0 1px 4px rgba(0,0,0,0.07),0 2px 8px rgba(0,0,0,0.04);
+  --shadow-lg:0 4px 16px rgba(0,0,0,0.10),0 2px 6px rgba(0,0,0,0.06);
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#111013;--bg2:#1a191d;--bg3:#242228;--bg4:#2e2c33;
+    --text:#f2f0f7;--text2:#9b99a4;--text3:#625f6b;
+    --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.14);
+    --blue:#60a5fa;--blue-bg:#1e2d4a;--blue-light:#1e3a5f;
+    --green:#4ade80;--green-bg:#052e16;--green-light:#14532d;
+    --red:#f87171;--red-bg:#2d0707;--red-light:#7f1d1d;
+    --amber:#fbbf24;--amber-bg:#1c1200;--amber-light:#713f12;
+    --purple:#a78bfa;--purple-bg:#2e1065;
+    --shadow:0 1px 4px rgba(0,0,0,0.5);--shadow-lg:0 4px 16px rgba(0,0,0,0.6);
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Hiragino Kaku Gothic ProN','Noto Sans JP','Yu Gothic',sans-serif;min-height:100vh;padding-bottom:calc(var(--nav-h) + 8px)}
+#app{max-width:600px;margin:0 auto;padding:0 14px}
+
+/* ─── BOTTOM NAV ─── */
+.bnav{position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);background:var(--bg2);border-top:1px solid var(--border);display:flex;z-index:200;max-width:600px;margin:0 auto}
+.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;cursor:pointer;color:var(--text3);font-size:10px;font-family:inherit;transition:color 0.15s;padding:4px 0;position:relative}
+.bnav-btn .bni{font-size:22px;line-height:1;transition:transform 0.2s}
+.bnav-btn.active{color:var(--blue)}
+.bnav-btn.active .bni{transform:scale(1.15)}
+.bnav-badge{position:absolute;top:6px;right:calc(50% - 18px);background:var(--red);color:#fff;font-size:9px;font-weight:700;border-radius:10px;padding:1px 5px;min-width:16px;text-align:center}
+
+/* ─── SCREENS ─── */
+.screen{display:none;padding-top:16px;animation:fadeIn 0.2s ease}
+.screen.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* ─── SECTION HEADER ─── */
+.sec-h{font-size:11px;font-weight:700;letter-spacing:0.08em;color:var(--text3);text-transform:uppercase;margin:20px 0 8px;padding-left:2px}
+
+/* ─── CARDS ─── */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px;box-shadow:var(--shadow)}
+.card+.card{margin-top:10px}
+
+/* ─── STREAK HERO ─── */
+.streak-hero{background:linear-gradient(135deg,#1d4ed8 0%,#7c3aed 100%);border-radius:var(--r);padding:18px 20px;display:flex;align-items:center;gap:14px;margin-bottom:12px;box-shadow:var(--shadow-lg);position:relative;overflow:hidden}
+.streak-hero::after{content:'🔥';position:absolute;right:-8px;top:-10px;font-size:80px;opacity:0.12}
+.streak-flame{font-size:36px;line-height:1}
+.streak-info{flex:1}
+.streak-num{font-size:32px;font-weight:800;color:#fff;line-height:1}
+.streak-label{font-size:12px;color:rgba(255,255,255,0.75);margin-top:2px}
+.streak-best{background:rgba(255,255,255,0.15);border-radius:8px;padding:4px 10px;font-size:11px;color:rgba(255,255,255,0.85)}
+
+/* ─── SUBJECT GRID ─── */
+.subj-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.subj-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px;cursor:pointer;transition:all 0.18s;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.subj-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);border-color:var(--border2)}
+.subj-card:active{transform:translateY(0) scale(0.98)}
+.subj-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--r) var(--r) 0 0}
+.subj-card[data-subj="労働基準法"]::before{background:var(--blue)}
+.subj-card[data-subj="労働安全衛生法"]::before{background:var(--green)}
+.subj-card[data-subj="雇用保険法"]::before{background:var(--purple)}
+.subj-card[data-subj="健康保険法"]::before{background:var(--red)}
+.subj-card[data-subj="国民年金法"]::before{background:var(--amber)}
+.subj-icon{font-size:22px;margin-bottom:6px}
+.subj-name{font-size:13px;font-weight:700;color:var(--text);line-height:1.3}
+.subj-stat{font-size:11px;color:var(--text3);margin-top:3px}
+.subj-pbar{height:4px;background:var(--bg3);border-radius:2px;margin-top:8px;overflow:hidden}
+.subj-pfill{height:100%;border-radius:2px;transition:width 0.6s ease}
+.pfill-high{background:var(--green)}
+.pfill-mid{background:var(--amber)}
+.pfill-low{background:var(--red)}
+
+/* ─── QUICK / EXAM BUTTONS ─── */
+.hero-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.hero-btn{padding:14px 10px;border:none;border-radius:var(--r);cursor:pointer;font-family:inherit;font-size:13px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:4px;transition:all 0.15s;box-shadow:var(--shadow)}
+.hero-btn:active{transform:scale(0.97)}
+.hero-btn-icon{font-size:24px}
+.hb-quick{background:linear-gradient(135deg,#0ea5e9,#2563eb);color:#fff}
+.hb-exam{background:linear-gradient(135deg,#d97706,#dc2626);color:#fff}
+.hb-review{background:var(--bg2);border:1px solid var(--border);color:var(--text);grid-column:span 2}
+
+/* ─── QUIZ ─── */
+.qz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.qz-meta{font-size:12px;color:var(--text3)}
+.qz-flag-btn{background:none;border:1px solid var(--border2);border-radius:8px;padding:4px 10px;cursor:pointer;font-size:12px;color:var(--text2);transition:all 0.15s}
+.qz-flag-btn.flagged{background:var(--amber-bg);border-color:var(--amber);color:var(--amber)}
+
+.prog-outer{background:var(--bg3);border-radius:4px;height:6px;margin-bottom:14px;overflow:hidden;position:relative}
+.prog-inner{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--blue),#7c3aed);transition:width 0.4s ease;position:relative}
+.prog-inner::after{content:'';position:absolute;right:0;top:0;height:100%;width:20px;background:rgba(255,255,255,0.4);border-radius:4px;animation:shimmer 1.5s infinite}
+@keyframes shimmer{0%{opacity:0}50%{opacity:1}100%{opacity:0}}
+
+.timer-wrap{margin-bottom:12px}
+.timer-top{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:4px}
+.timer-bar-bg{height:5px;border-radius:3px;background:var(--bg3);overflow:hidden}
+.timer-bar{height:5px;border-radius:3px;background:var(--blue);transition:width 0.1s linear,background 0.4s}
+.timer-bar.warn{background:var(--amber)}
+.timer-bar.danger{background:var(--red)}
+@keyframes pulse-border{0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,0.4)}50%{box-shadow:0 0 0 4px rgba(220,38,38,0)}}
+.timer-urgent{animation:pulse-border 1s infinite}
+
+.q-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:12px;box-shadow:var(--shadow)}
+.q-year-badge{display:inline-block;font-size:10px;background:var(--blue-bg);color:var(--blue);border-radius:6px;padding:2px 8px;margin-bottom:10px;font-weight:600}
+.q-text{font-size:15px;line-height:1.8;color:var(--text)}
+
+.choices{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.choice{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r-sm);padding:12px 14px;cursor:pointer;display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--text);transition:all 0.15s;line-height:1.6;text-align:left;width:100%;font-family:inherit;position:relative;overflow:hidden}
+.choice::before{content:'';position:absolute;inset:0;background:var(--blue);opacity:0;transition:opacity 0.15s}
+.choice:hover:not(:disabled)::before{opacity:0.04}
+.choice:hover:not(:disabled){border-color:var(--border2);transform:translateX(2px)}
+.choice:disabled{cursor:default}
+.choice-lbl{font-weight:800;min-width:20px;color:var(--text3);flex-shrink:0;font-size:13px}
+.choice.correct{border-color:var(--green);background:var(--green-bg);animation:correctAnim 0.4s ease}
+.choice.correct .choice-lbl{color:var(--green)}
+.choice.wrong{border-color:var(--red);background:var(--red-bg);animation:wrongAnim 0.3s ease}
+.choice.wrong .choice-lbl{color:var(--red)}
+@keyframes correctAnim{0%{transform:scale(1)}30%{transform:scale(1.02)}100%{transform:scale(1)}}
+@keyframes wrongAnim{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+
+.result-icon{text-align:center;font-size:48px;margin:8px 0;animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1)}
+@keyframes popIn{from{transform:scale(0) rotate(-10deg)}to{transform:scale(1) rotate(0)}}
+
+.exp-box{border-radius:var(--r-sm);padding:14px;margin-bottom:12px;font-size:13px;line-height:1.75}
+.exp-box.correct{background:var(--green-bg);border:1px solid var(--green-light)}
+.exp-box.wrong{background:var(--red-bg);border:1px solid var(--red-light)}
+.exp-head{font-weight:700;margin-bottom:8px;font-size:14px;display:flex;align-items:center;gap:6px}
+.exp-head.correct{color:var(--green)}
+.exp-head.wrong{color:var(--red)}
+.exp-law{font-size:11px;background:var(--blue-bg);color:var(--blue);border-radius:6px;padding:3px 8px;margin-bottom:6px;display:inline-block;font-weight:600}
+.exp-warn{font-size:12px;background:var(--amber-bg);border:1px solid var(--amber-light);border-radius:6px;padding:6px 10px;margin-top:8px;color:var(--amber)}
+.exp-tip{font-size:12px;background:var(--purple-bg);border-radius:6px;padding:6px 10px;margin-top:6px;color:var(--purple)}
+
+.btn-next{width:100%;padding:14px;background:var(--blue);border:none;border-radius:var(--r-sm);cursor:pointer;font-size:14px;font-weight:700;color:#fff;transition:all 0.15s;font-family:inherit}
+.btn-next:hover{background:#1d4ed8}
+.btn-next:active{transform:scale(0.98)}
+.btn-outline{width:100%;padding:12px;background:var(--bg2);border:1.5px solid var(--border2);border-radius:var(--r-sm);cursor:pointer;font-size:13px;font-weight:600;color:var(--text2);font-family:inherit;transition:all 0.15s;margin-top:8px}
+.btn-outline:hover{background:var(--bg3)}
+
+/* ─── RESULT ─── */
+.result-hero{text-align:center;padding:24px 16px 16px}
+.rh-score{font-size:72px;font-weight:900;line-height:1;letter-spacing:-3px}
+.rh-denom{font-size:22px;color:var(--text2);margin-top:4px}
+.rh-pct{font-size:18px;color:var(--text2);margin-top:4px}
+.rh-grade{font-size:40px;margin:10px 0}
+.rh-msg{font-size:14px;color:var(--text2);line-height:1.6}
+
+.subj-result-bars{display:flex;flex-direction:column;gap:8px}
+.srb-row{display:flex;align-items:center;gap:10px}
+.srb-label{font-size:11px;color:var(--text2);width:80px;flex-shrink:0;text-align:right}
+.srb-track{flex:1;height:22px;background:var(--bg3);border-radius:5px;overflow:hidden;position:relative}
+.srb-fill{height:100%;border-radius:5px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;transition:width 0.9s cubic-bezier(.4,0,.2,1)}
+.srb-fill.high{background:linear-gradient(90deg,#16a34a,#4ade80)}
+.srb-fill.mid{background:linear-gradient(90deg,#d97706,#fbbf24)}
+.srb-fill.low{background:linear-gradient(90deg,#dc2626,#f87171)}
+.srb-pct{font-size:11px;font-weight:700;color:#fff}
+.srb-badge{font-size:10px;padding:1px 6px;border-radius:4px;background:var(--red-bg);color:var(--red);border:1px solid var(--red-light)}
+
+/* ─── EXAM MODE ─── */
+.exam-nav{position:sticky;top:0;background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 14px;z-index:100;display:flex;align-items:center;gap:10px;margin:0 -14px}
+.exam-timer{font-size:20px;font-weight:800;color:var(--text);min-width:70px}
+.exam-timer.warn{color:var(--amber)}
+.exam-timer.danger{color:var(--red);animation:pulse-border 1s infinite}
+.exam-prog-wrap{flex:1}
+.exam-prog-label{font-size:10px;color:var(--text3);margin-bottom:2px}
+.exam-map{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin-bottom:14px}
+.exam-map-dot{width:100%;aspect-ratio:1;border-radius:4px;background:var(--bg3);border:1px solid var(--border);cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center;color:var(--text3);transition:all 0.12s;font-weight:600}
+.exam-map-dot.answered{background:var(--blue-bg);border-color:var(--blue);color:var(--blue)}
+.exam-map-dot.flagged{background:var(--amber-bg);border-color:var(--amber);color:var(--amber)}
+.exam-map-dot.current{background:var(--blue);color:#fff;box-shadow:0 0 0 2px var(--blue)}
+
+/* ─── STATS ─── */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px 8px;text-align:center;box-shadow:var(--shadow)}
+.stat-val{font-size:24px;font-weight:800;color:var(--text)}
+.stat-lbl{font-size:10px;color:var(--text3);margin-top:2px}
+
+.chart-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.cr-label{font-size:11px;color:var(--text2);width:72px;flex-shrink:0;text-align:right;line-height:1.3}
+.cr-track{flex:1;height:24px;background:var(--bg3);border-radius:5px;overflow:hidden}
+.cr-fill{height:100%;border-radius:5px;display:flex;align-items:center;padding-right:8px;justify-content:flex-end;transition:width 0.8s ease}
+.cr-fill.high{background:linear-gradient(90deg,var(--green),#4ade80)}
+.cr-fill.mid{background:linear-gradient(90deg,var(--amber),#fbbf24)}
+.cr-fill.low{background:linear-gradient(90deg,var(--red),#f87171)}
+.cr-pct{font-size:11px;font-weight:700;color:#fff}
+.cr-badge{font-size:9px;padding:2px 6px;border-radius:4px;background:var(--red-bg);color:var(--red);border:1px solid var(--red-light);white-space:nowrap}
+
+.hist-wrap{display:flex;gap:3px;align-items:flex-end;height:64px}
+.hist-bar{flex:1;border-radius:3px 3px 0 0;min-height:3px;transition:height 0.4s ease;cursor:default}
+.hist-label-row{display:flex;gap:3px;margin-top:3px}
+.hist-lbl{flex:1;font-size:9px;color:var(--text3);text-align:center}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-day{aspect-ratio:1;border-radius:4px;background:var(--bg3)}
+.cal-day.studied{background:var(--blue)}
+.cal-day.studied.great{background:var(--green)}
+
+/* ─── QUESTION MANAGER ─── */
+.qm-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.qm-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px;box-shadow:var(--shadow);display:flex;gap:10px;align-items:flex-start}
+.qm-item-body{flex:1;min-width:0}
+.qm-item-q{font-size:13px;color:var(--text);line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qm-item-meta{font-size:11px;color:var(--text3);margin-top:3px}
+.qm-item-actions{display:flex;gap:6px;flex-shrink:0}
+.btn-icon{background:none;border:1px solid var(--border2);border-radius:6px;padding:4px 8px;cursor:pointer;font-size:14px;transition:all 0.12s}
+.btn-icon:hover{background:var(--bg3)}
+
+.form-group{margin-bottom:14px}
+.form-label{font-size:12px;font-weight:700;color:var(--text2);margin-bottom:5px;display:block}
+.form-input,.form-select,.form-textarea{width:100%;background:var(--bg2);border:1.5px solid var(--border2);border-radius:var(--r-sm);padding:10px 12px;font-size:14px;color:var(--text);font-family:inherit;transition:border-color 0.15s;outline:none}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-light)}
+.form-textarea{min-height:80px;resize:vertical}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+/* ─── SETTINGS ─── */
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)}
+.settings-row:last-child{border-bottom:none}
+.settings-label{font-size:14px;color:var(--text)}
+.settings-sub{font-size:11px;color:var(--text3);margin-top:2px}
+.toggle{width:44px;height:24px;background:var(--bg3);border:1.5px solid var(--border2);border-radius:12px;cursor:pointer;position:relative;transition:background 0.2s}
+.toggle.on{background:var(--blue);border-color:var(--blue)}
+.toggle::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2)}
+.toggle.on::after{transform:translateX(20px)}
+
+/* ─── MODAL ─── */
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;display:flex;align-items:flex-end;justify-content:center;animation:fadeIn 0.2s}
+.modal{background:var(--bg2);border-radius:var(--r) var(--r) 0 0;width:100%;max-width:600px;max-height:85vh;overflow-y:auto;padding:20px 16px;padding-bottom:calc(20px + var(--nav-h));animation:slideUp 0.25s ease}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-title{font-size:17px;font-weight:700;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+.modal-close{background:none;border:none;cursor:pointer;font-size:20px;color:var(--text3);padding:4px}
+
+/* ─── MISC ─── */
+.tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:5px;font-weight:700}
+.tag-blue{background:var(--blue-bg);color:var(--blue)}
+.tag-green{background:var(--green-bg);color:var(--green)}
+.tag-red{background:var(--red-bg);color:var(--red)}
+.tag-amber{background:var(--amber-bg);color:var(--amber)}
+.tag-custom{background:var(--purple-bg);color:var(--purple)}
+.divider{height:1px;background:var(--border);margin:12px 0}
+.empty-state{text-align:center;padding:32px 16px;color:var(--text3);font-size:14px}
+.empty-icon{font-size:40px;margin-bottom:8px}
+</style>
+</head>
+<body>
+
+<!-- BOTTOM NAV -->
+<nav style="position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);background:var(--bg2);border-top:1px solid var(--border);display:flex;z-index:200">
+  <div style="display:flex;width:100%;max-width:600px;margin:0 auto">
+    <button class="bnav-btn active" id="nav-home" onclick="showTab('home')">
+      <span class="bni">🏠</span><span>ホーム</span>
+    </button>
+    <button class="bnav-btn" id="nav-quiz" onclick="showTab('quiz')">
+      <span class="bni">📝</span><span>問題</span>
+    </button>
+    <button class="bnav-btn" id="nav-stats" onclick="showTab('stats');renderStats()">
+      <span class="bni">📊</span><span>記録</span>
+    </button>
+    <button class="bnav-btn" id="nav-manage" onclick="showTab('manage');renderQManager()">
+      <span class="bni">✏️</span><span>管理</span>
+    </button>
+    <button class="bnav-btn" id="nav-settings" onclick="showTab('settings')">
+      <span class="bni">⚙️</span><span>設定</span>
+    </button>
+  </div>
+</nav>
+
+<div id="app">
+
+<!-- ═══ HOME ═══ -->
+<div id="tab-home" class="screen active">
+  <div class="streak-hero">
+    <div class="streak-flame">🔥</div>
+    <div class="streak-info">
+      <div class="streak-num" id="streak-num">0</div>
+      <div class="streak-label">日連続学習中</div>
+    </div>
+    <div class="streak-best" id="streak-best">最高 0日</div>
+  </div>
+  <div class="hero-btns">
+    <button class="hero-btn hb-quick" onclick="startQuick()">
+      <span class="hero-btn-icon">⚡</span><span>暇問1問</span>
+    </button>
+    <button class="hero-btn hb-exam" onclick="startExam()">
+      <span class="hero-btn-icon">📋</span><span>模擬試験</span>
+    </button>
+    <button class="hero-btn hb-review" id="review-btn-home" onclick="startReview()" style="display:none">
+      <span>📌 復習リスト</span><span id="review-cnt-home" class="tag tag-amber" style="font-size:11px">0問</span>
+    </button>
+  </div>
+  <div class="sec-h">科目別学習</div>
+  <div class="subj-grid" id="subj-grid"></div>
+</div>
+
+<!-- ═══ QUIZ ═══ -->
+<div id="tab-quiz" class="screen">
+  <div style="padding:20px 0;text-align:center;color:var(--text3)">
+    <div style="font-size:32px;margin-bottom:8px">📝</div>
+    <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px">学習を始めましょう</div>
+    <div style="font-size:13px">ホームから科目を選んで学習を開始</div>
+  </div>
+</div>
+
+<!-- QUIZ ACTIVE VIEW (replaces quiz tab content) -->
+
+<!-- ═══ STATS ═══ -->
+<div id="tab-stats" class="screen">
+  <div class="sec-h">学習サマリー</div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-val" id="st-total">0</div><div class="stat-lbl">総解答数</div></div>
+    <div class="stat-card"><div class="stat-val" id="st-pct">0%</div><div class="stat-lbl">正解率</div></div>
+    <div class="stat-card"><div class="stat-val" id="st-streak">0</div><div class="stat-lbl">現在ストリーク</div></div>
+  </div>
+  <div class="card">
+    <div style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:12px">科目別 正解率</div>
+    <div id="subj-chart"></div>
+  </div>
+  <div class="card" style="margin-top:10px">
+    <div style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:10px">正解率の推移（直近14回）</div>
+    <div class="hist-wrap" id="hist-bars"></div>
+    <div class="hist-label-row" id="hist-labels"></div>
+  </div>
+  <div class="card" style="margin-top:10px">
+    <div style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:10px">学習カレンダー（直近28日）</div>
+    <div class="cal-grid" id="cal-grid"></div>
+  </div>
+</div>
+
+<!-- ═══ MANAGE ═══ -->
+<div id="tab-manage" class="screen">
+  <div class="hero-btns" style="margin-bottom:0">
+    <button class="hero-btn hb-quick" style="font-size:12px" onclick="openAddModal()">
+      <span class="hero-btn-icon">➕</span><span>問題を追加</span>
+    </button>
+    <button class="hero-btn hb-exam" style="font-size:12px;background:linear-gradient(135deg,#059669,#16a34a)" onclick="exportJSON()">
+      <span class="hero-btn-icon">📤</span><span>エクスポート</span>
+    </button>
+  </div>
+  <div style="margin:8px 0">
+    <label style="display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;cursor:pointer;box-shadow:var(--shadow)">
+      <span style="font-size:20px">📥</span>
+      <span style="font-size:13px;font-weight:600;color:var(--text)">JSONインポート</span>
+      <input type="file" accept=".json" onchange="importJSON(event)" style="display:none">
+    </label>
+  </div>
+  <div class="sec-h">カスタム問題一覧</div>
+  <div id="qm-list-wrap"></div>
+</div>
+
+<!-- ═══ SETTINGS ═══ -->
+<div id="tab-settings" class="screen">
+  <div class="sec-h">学習設定</div>
+  <div class="card">
+    <div class="settings-row">
+      <div><div class="settings-label">タイマー機能</div><div class="settings-sub">1問30秒の制限時間</div></div>
+      <div class="toggle on" id="tog-timer" onclick="toggleSetting('timer',this)"></div>
+    </div>
+    <div class="settings-row">
+      <div><div class="settings-label">解説を即表示</div><div class="settings-sub">回答後すぐに解説を表示</div></div>
+      <div class="toggle on" id="tog-exp" onclick="toggleSetting('exp',this)"></div>
+    </div>
+    <div class="settings-row">
+      <div><div class="settings-label">カスタム問題を混ぜる</div><div class="settings-sub">通常学習に自作問題を含める</div></div>
+      <div class="toggle on" id="tog-custom" onclick="toggleSetting('custom',this)"></div>
+    </div>
+  </div>
+  <div class="sec-h">データ管理</div>
+  <div class="card">
+    <div class="settings-row">
+      <div><div class="settings-label">学習データをリセット</div><div class="settings-sub">正解率・履歴をすべて削除</div></div>
+      <button class="btn-icon" onclick="resetStats()" style="font-size:12px;padding:6px 12px;color:var(--red);border-color:var(--red)">リセット</button>
+    </div>
+    <div class="settings-row">
+      <div><div class="settings-label">復習リストをクリア</div><div class="settings-sub">すべての復習問題を削除</div></div>
+      <button class="btn-icon" onclick="clearReview()" style="font-size:12px;padding:6px 12px;color:var(--amber);border-color:var(--amber)">クリア</button>
+    </div>
+  </div>
+  <div class="sec-h">アプリ情報</div>
+  <div class="card">
+    <div class="settings-row"><div class="settings-label">バージョン</div><div style="font-size:13px;color:var(--text3)">3.0.0</div></div>
+    <div class="settings-row"><div class="settings-label">収録問題数</div><div style="font-size:13px;color:var(--text3)" id="info-qcount">0問</div></div>
+  </div>
+</div>
+
+</div><!-- #app -->
+
+<!-- ═══ MODAL (Add/Edit Question) ═══ -->
+<div id="modal-backdrop" style="display:none" class="modal-backdrop" onclick="closeModalBackdrop(event)">
+  <div class="modal" id="modal-body">
+    <div class="modal-title">
+      <span id="modal-title-text">問題を追加</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// QUESTION DATABASE (50+ per subject)
+// ═══════════════════════════════════════════════
+const QDB_BASE = {
+"労働基準法":[
+{q:"労働基準法第1条が定める「労働条件の原則」として正しいものはどれか。",c:["労働条件は使用者が一方的に決定できる","労働条件は労働者が人たるに値する生活を営むための必要を充たすものでなければならない","労働条件の最低基準を理由に条件を引き下げることができる","労働条件は国が一律に決定する"],a:1,year:"H28",law:"労基法第1条",warn:"第1条第1項の「人たるに値する生活」という文言が頻出。第2項の最低基準向上努力義務も重要。",tip:"「人たる」→人間らしい生活保障が目的と覚える"},
+{q:"労働基準法における「労働者」の定義として正しいものはどれか。",c:["正社員のみ","事業に使用され賃金を支払われる者","書面で雇用契約を締結した者","雇用保険に加入している者"],a:1,year:"R3",law:"労基法第9条",warn:"職業の種類・雇用形態を問わない。委任・請負の場合でも実態で判断される。",tip:"「使用＋賃金」の2要件がポイント"},
+{q:"労働基準法における「使用者」に該当しないものはどれか。",c:["事業主","事業の経営担当者","事業の労働者に関する事項について行為をする者","単なる同僚の労働者"],a:3,year:"H30",law:"労基法第10条",warn:"使用者は①事業主②経営担当者③その事業の労働者に関する事項について権限を持つ者の3類型がある。",tip:"「労働者に関する事項」について権限を持つ者が鍵"},
+{q:"賃金の「直接払いの原則」の例外として認められているものはどれか。",c:["未成年者の賃金を親権者に支払う","労働者の同意を得て銀行口座に振り込む","労働者の代理人に支払う","使用者が預金として保管する"],a:1,year:"R4",law:"労基法第24条",warn:"未成年者（親権者への支払い）・代理人への支払いは直接払い原則違反。銀行振込は労働者の同意があれば可。",tip:"「直接」例外は銀行振込のみ（労働者同意必要）"},
+{q:"「賃金の全額払いの原則」の例外として認められているものはどれか。",c:["使用者の判断による罰金控除","労使協定に基づく組合費控除","売上不足分の控除","業務上損害の弁償控除"],a:1,year:"R2",law:"労基法第24条",warn:"全額払いの例外は①法令に別段の定め②労使協定による控除の2つのみ。損害賠償・罰金の控除は不可。",tip:"「全額」例外→法令OR労使協定"},
+{q:"1日の法定労働時間として正しいものはどれか。",c:["6時間","7時間","8時間","9時間"],a:2,year:"R5",law:"労基法第32条",warn:"1日8時間・1週40時間が原則。常時10人未満の特定業種（小売業・旅館等）は週44時間の特例あり。",tip:"「8時間・40時間」は絶対暗記"},
+{q:"36協定（時間外・休日労働協定）の上限規制として、一般則での時間外労働の上限時間として正しいものはどれか。",c:["月45時間・年360時間","月60時間・年500時間","月80時間・年720時間","上限なし"],a:0,year:"R5",law:"労基法第36条",warn:"2019年改正で法定化。臨時的な特別条項あり（年720時間、単月100時間未満、複数月80時間以内）。建設業等は5年間猶予（2024年4月から適用）。",tip:"「36（サブロク）協定」→月45h・年360h"},
+{q:"時間外労働・深夜労働の割増賃金率として、「月60時間を超える時間外労働」の割増率は何割以上か（中小企業含む・2023年4月以降）。",c:["2割5分以上","3割5分以上","5割以上","6割以上"],a:2,year:"R5",law:"労基法第37条",warn:"2023年4月から中小企業にも月60時間超の50%割増が適用（猶予終了）。通常の時間外は25%、深夜は25%、休日は35%。",tip:"60時間超え→50%（「むりやり」→5割）"},
+{q:"休憩時間の付与に関して正しいものはどれか。",c:["労働時間が5時間を超えると30分","労働時間が6時間を超えると45分、8時間を超えると1時間","労働時間が7時間を超えると60分","一律60分"],a:1,year:"R3",law:"労基法第34条",warn:"6時間ちょうどは休憩不要（「超えると」が重要）。休憩は自由利用が原則。一斉付与原則あり（例外：労使協定）。",tip:"6h超→45分、8h超→1時間（「ろくよんにちょっきんの法則」は覚え方）"},
+{q:"法定休日について正しいものはどれか。",c:["毎週2日以上","毎週少なくとも1日（または4週4日以上）","毎月4日以上","隔週1日以上"],a:1,year:"R4",law:"労基法第35条",warn:"毎週1回（週休制）が原則。変形休日制（4週4日以上）も可。法定休日労働には35%割増が必要。",tip:"「35条→35%割増」で法条と割増率を同時暗記"},
+{q:"解雇予告の例外として、予告なく即時解雇できる場合として正しいものはどれか。",c:["業績悪化による人員削減","天災事変等やむを得ない事由+行政官庁の認定","試用期間中の解雇は常に予告不要","定年退職者の再雇用終了"],a:1,year:"H29",law:"労基法第20条",warn:"天災等による認定解雇・日雇い（1か月以内）・試用期間14日以内・本人の責に帰すべき事由（認定必要）が予告除外。試用期間でも14日超えたら予告必要。",tip:"「天（天災）＋認（行政官庁認定）」で即時解雇OK"},
+{q:"「解雇の制限」として正しいものはどれか。",c:["業務上の傷病による休業期間中は解雇できない","妊娠中の女性は出産後6か月のみ解雇制限","育児休業中の解雇は補償を払えば可","産後8週間以内でも解雇できる"],a:0,year:"R2",law:"労基法第19条",warn:"業務上傷病の休業期間中+打切補償30日前予告が完了するまで解雇不可。産前産後休業期間中+その後30日間も解雇制限。",tip:"「業務上傷病休業中は解雇禁止」は絶対NG"},
+{q:"年次有給休暇の時季指定義務（使用者側）として正しいものはどれか。",c:["全労働者に年間20日以上取得させる義務","年10日以上の有給を持つ労働者に年5日は使用者が時季指定して取得させる義務","労働者の請求があれば全日数を一括取得させる義務","有給取得は労働者の自由であり使用者は介入できない"],a:1,year:"R元",law:"労基法第39条第7項",warn:"2019年4月から義務化。年10日以上保有者が対象。5日を超える分について時季指定義務。労働者が自ら取得した日数は5日から差し引く。",tip:"「10日以上持つ人→5日は必ず取らせる」"},
+{q:"就業規則の記載事項のうち「絶対的記載事項」に含まれるものはどれか。",c:["退職手当の支給条件","制裁の種類・程度","表彰の条件","安全衛生に関する事項"],a:0,year:"H30",law:"労基法第89条",warn:"絶対的記載事項：①始終業・休憩②休日・休暇③賃金（計算・支払・昇給）④退職（解雇含む）退職金は支給する場合のみ絶対的。",tip:"「始・休・賃・退」の4つを絶対暗記"},
+{q:"労働基準法上の「年少者」とは何歳未満の者か。",c:["15歳未満","16歳未満","18歳未満","20歳未満"],a:2,year:"R4",law:"労基法第56条",warn:"「年少者」＝18歳未満、「児童」＝15歳未満（義務教育修了前）。坑内労働禁止・深夜業禁止・変形労働時間制不可など保護規定多数。",tip:"「年少者は18歳未満」→18→18禁と同じ年齢"},
+{q:"労働基準法上の「産後休業」の期間として正しいものはどれか。",c:["産後6週間は就業禁止（本人希望でも不可）","産後8週間は就業禁止（医師が認めた場合は6週以後就業可）","産後4週間は就業禁止","産後12週間は就業禁止"],a:1,year:"R3",law:"労基法第65条",warn:"産後8週間は原則就業禁止。ただし産後6週間経過後に本人が請求し医師が支障ないと認めた業務は就業可。産前6週間（多胎14週）は請求があれば就業禁止。",tip:"「産後8週禁止、でも6週+医師OK」"},
+{q:"「変形労働時間制」のうち、労使協定（届出）ではなく就業規則等で採用できるものはどれか。",c:["1か月単位の変形労働時間制","1年単位の変形労働時間制","1週間単位の非定型的変形労働時間制","フレックスタイム制"],a:0,year:"H29",law:"労基法第32条の2",warn:"1か月単位は就業規則等に定めれば足りる（労使協定も可だが届出不要の場合あり）。1年単位・1週間単位は労使協定+届出が必要。",tip:"「ひとつき（1か月）→就業規則でOK」"},
+{q:"「みなし労働時間制」が適用される場合として正しいものはどれか。",c:["在宅勤務（テレワーク）はすべてみなし労働時間制が適用される","事業場外みなし・裁量労働制が法定要件を満たす場合に適用される","会社の規則で定めれば任意に適用できる","上限規制（36協定）の対象外となる"],a:1,year:"R2",law:"労基法第38条の2〜4",warn:"事業場外みなし・専門業務型裁量労働制・企画業務型裁量労働制の3種類。裁量労働制でも深夜・休日労働の割増賃金は必要。",tip:"みなし=「とりあえずこの時間とみなす」制度"},
+{q:"労働基準法上の「平均賃金」の使用場面として誤っているものはどれか。",c:["解雇予告手当の算定","休業手当（使用者の責に帰すべき休業）の算定","年次有給休暇の賃金算定（原則）","割増賃金の基礎算定"],a:3,year:"H30",law:"労基法第12条",warn:"平均賃金の使用場面：解雇予告手当・休業手当・年次有給休暇（平均賃金による場合）・災害補償など。割増賃金の基礎は「通常の労働時間の賃金」（≠平均賃金）。",tip:"割増賃金は「通常賃金ベース」、平均賃金ではない"},
+{q:"「休業手当」の支給率として正しいものはどれか。",c:["平均賃金の5割以上","平均賃金の6割以上","平均賃金の7割以上","平均賃金の10割"],a:1,year:"R5",law:"労基法第26条",warn:"使用者の責に帰すべき事由による休業の場合、平均賃金の60%以上を支払う義務。「使用者の責」の範囲（不可抗力は除く）の判断が重要。",tip:"「休業手当→ろくじゅっぱ(60%)」"},
+{q:"労働基準法上の「強制貯金の禁止」に関して正しいものはどれか。",c:["使用者は貯蓄契約の締結・貯蓄金の管理を一切行えない","労使協定を締結すれば任意貯蓄の管理は可能","強制貯蓄は禁止だが任意貯蓄の委託はその要件を満たせば可","役員には適用されない"],a:2,year:"H28",law:"労基法第18条",warn:"強制貯蓄（強制的な貯金）は絶対禁止。ただし労働者が任意に貯蓄金の管理を委託（労使協定必要）することは可。返還請求があれば遅滞なく返還。",tip:"「強制→禁止、任意委託→OK（労使協定）」"},
+{q:"「賠償予定の禁止」として正しいものはどれか。",c:["損害が発生した場合の現実の損害賠償請求は禁止","労働契約の不履行について違約金・損害賠償額を予定する契約は禁止","研修費用の返還契約はすべて禁止","連帯保証人を立てることは禁止"],a:1,year:"R元",law:"労基法第16条",warn:"「予定」が禁止（実損害の請求はOK）。研修費用の返還も内容によっては違法となる（合理的期間なら有効の判例あり）。",tip:"「予定」→未来の損害額を契約で決めること=禁止"},
+{q:"「前借金相殺の禁止」として正しいものはどれか。",c:["前払い賃金（前借）は一切禁止","前借金とその後の賃金を相殺することが禁止","社宅費等の天引きは前借金相殺に当たる","労使協定があれば前借金相殺はできる"],a:1,year:"H29",law:"労基法第17条",warn:"前借金（前払いした金銭）を将来の賃金と相殺することが禁止。前払い賃金そのものは禁止されていない。","tip":"「前借り金を給料から天引き」→労基法違反"},
+{q:"「労働契約の期間」に関して、専門的知識等を有する労働者が締結できる労働契約期間の上限として正しいものはどれか。",c:["3年","5年","7年","期間の定めなし"],a:1,year:"R4",law:"労基法第14条",warn:"原則3年が上限。例外として専門的知識等（高度専門職）や60歳以上の労働者は5年まで可。5年超えは期間の定めのない契約（無期転換）。",tip:"「専門職60歳以上→5年」（専門家は長く働ける）"},
+{q:"「労働条件の明示」に関して、書面（または電磁的方法）による明示が義務づけられているものとして正しいものはどれか。",c:["退職金の有無のみ","労働契約期間・就業場所・業務内容・労働時間・賃金など主要事項","口頭で伝えれば書面不要","就業規則の配布で代替できる"],a:1,year:"R5",law:"労基法第15条",warn:"2024年4月改正で「就業場所・業務の変更の範囲」「更新の上限」「無期転換申込権」「待遇差の内容」なども追加。書面（または電磁的方法）明示必須。",tip:"「書面明示」→特に賃金・労働時間は絶対書面"},
+{q:"「退職時の証明書」について正しいものはどれか。",c:["使用者は退職の理由を記載する義務は常にない","労働者が請求した場合、使用者は遅滞なく証明書を交付しなければならない","証明書の記載事項は使用者が自由に決定できる","退職後1年を超えると交付義務はない"],a:1,year:"H30",law:"労基法第22条",warn:"退職証明書には労働者が請求した事項のみ記載（未請求事項は記載不可）。解雇理由証明書も別途規定（解雇予告後請求可）。ブラックリスト禁止も同条。",tip:"「労働者が請求した事項のみ」記載の原則"},
+{q:"「賃金の消滅時効」として2020年4月以降の取扱いとして正しいものはどれか。",c:["1年","2年（当面の措置）→将来的に5年","3年","5年（即時適用）"],a:1,year:"R3",law:"労基法第115条",warn:"2020年4月改正で賃金請求権の消滅時効は5年（当面は3年）に延長。退職金は5年（改正前同様）。その他の請求権（年休除く）は3年。",tip:"「賃金→当面3年、退職金→5年」"},
+{q:"労働基準法上「未成年者」に関して正しいものはどれか。",c:["親権者が未成年者の代わりに労働契約を締結できる","未成年者は単独で労働契約を締結できる","未成年者の賃金は親権者に直接支払わなければならない","20歳未満を「未成年者」という"],a:1,year:"R2",law:"労基法第58条",warn:"①親権者・後見人による代理締結不可②賃金は本人に直接支払（親権者が本人の同意なく受け取り不可）③未成年者自身が不利な契約を解除できる権利あり",tip:"「代理締結不可・直接払い・本人解除OK」の3点セット"},
+{q:"労働基準法における「均等待遇」の規定として正しいものはどれか。",c:["男女間の賃金格差は禁止","国籍・信条・社会的身分を理由とする労働条件の差別的取扱いは禁止","年齢による差別的取扱いは禁止","雇用形態（正規・非正規）による差別は禁止"],a:1,year:"H29",law:"労基法第3条",warn:"労基法3条は国籍・信条・社会的身分による差別禁止。男女差別禁止は4条（賃金）・男女雇用機会均等法。年齢・雇用形態は別の法律が対応。",tip:"「3条→3つの差別禁止（国籍・信条・社会的身分）」"},
+{q:"「寄宿舎規則」に関して正しいものはどれか。",c:["寄宿舎規則は就業規則に含まれる","使用者は寄宿舎規則を行政官庁に届け出なければならない","寄宿舎規則は不要","寄宿舎に関する事項は就業規則で定める"],a:1,year:"H28",law:"労基法第96条の2",warn:"使用者が労働者の寄宿舎を設ける場合は①安全・衛生上の措置②寄宿舎規則の作成・届出が義務。就業規則とは別書類。",tip:"寄宿舎規則→別途作成・届出必要"},
+{q:"労働基準監督官の「臨検（立入検査）」に関して正しいものはどれか。",c:["事業主の事前承諾が必要","何時でも事業場に立ち入り、設備・帳簿等を検査し労働者に質問できる","裁判所の令状が必要","労働組合の同意が必要"],a:1,year:"R元",law:"労基法第101条",warn:"労働基準監督官は司法警察員（特別司法警察員）としての権限を持つ。司法警察権の行使にも令状が必要な場合あり。行政指導権限と司法警察権限の区別に注意。",tip:"監督官は「いつでも立入検査OK」（事前承諾不要）"},
+{q:"労働基準法上の「制裁（懲戒）」として就業規則に定める「減給の制裁」の限度額として正しいものはどれか。",c:["1回の額が平均賃金の1日分の5割以下・総額が賃金1賃金支払期の1割以下","1回の額が平均賃金の1日分の3割以下・総額が賃金1賃金支払期の3割以下","1回の額が日給の3割以下・総額に制限なし","賃金全額の減給も可"],a:0,year:"R4",law:"労基法第91条",warn:"「1回の額→平均賃金1日分の半額（50%）以下」「総額→1支払期の賃金総額の1/10以下」の2つの上限。両方満たす必要あり。",tip:"「半額（1/2）と10分の1（1/10）」の2つの上限"},
+{q:"「労働協約」の効力として正しいものはどれか。",c:["労働協約は就業規則より常に優先される","労働協約は個々の労働契約より有利な条件を定めるもので、逆に不利な条件は無効","労働協約が定める基準に違反する労働契約の部分は無効となり労働協約の基準が適用される","労働協約は正社員のみに適用される"],a:2,year:"H30",law:"労組法第16条",warn:"労働協約の効力：①労働契約より有利な部分→労働契約に適用②不利な部分→不利益変更でも有効の場合あり（逆規範的効力の問題）。就業規則との関係も重要。",tip:"「労働協約違反の労働契約部分→自動修正」"},
+{q:"「時間外労働の上限」に関して、特別条項付き36協定でも超えることができない限度として誤っているものはどれか。",c:["年間720時間以内","複数月平均80時間以内","単月100時間未満（休日労働含む）","月60時間以内"],a:3,year:"R5",law:"労基法第36条第6項",warn:"特別条項でも①年720時間以内②2〜6か月平均80時間以内（休日含む）③単月100時間未満（休日含む）の3つは超えられない。月60時間は通常の上限。",tip:"「720・80・100」の3数字をセットで暗記"},
+{q:"「事業場外みなし労働時間制」が適用できる条件として正しいものはどれか。",c:["会社の許可があれば常に適用できる","事業場外で業務に従事し、労働時間の算定が困難な場合","テレワークはすべて適用対象","管理職以上に限り適用できる"],a:1,year:"R3",law:"労基法第38条の2",warn:"テレワークでは情報通信機器が常時接続（使用者の随時指示が可能）な場合は「算定が困難」に当たらずみなし不可。外回り営業など算定困難なケースが典型例。",tip:"「算定困難」がキーワード→テレワーク常時接続はNG"},
+{q:"「専門業務型裁量労働制」の対象業務として挙げられるものはどれか。",c:["単純な製造ライン業務","研究開発・情報処理システムの分析・設計・新聞記者等の専門的業務","すべての事務職","コンビニエンスストアの店員"],a:1,year:"H29",law:"労基法第38条の3",warn:"省令で19業務が列挙（研究開発・情報システム設計・放送番組の制作・新聞記者・公認会計士・弁護士等）。労使協定+本人同意（2024年改正）が必要。",tip:"「専門職19業務」→知識・裁量が高い職種"},
+{q:"女性労働者の「坑内業務の就業制限」として正しいものはどれか。",c:["すべての女性は坑内業務に就けない","妊産婦のみ禁止でそれ以外は一般坑内業務は可（重筋作業等は禁止）","18歳以上の女性は制限なし","未成年者と同じ規制が適用される"],a:1,year:"R2",law:"労基法第64条の2",warn:"2006年改正で女性の坑内労働制限が見直し。妊産婦等は全面禁止。それ以外の女性は一般坑内業務は可だが人力掘削・採炭等重筋作業は禁止。",tip:"「妊産婦は全面禁止、それ以外は一部OK」"},
+{q:"「育児時間」として労働基準法が規定する内容として正しいものはどれか。",c:["生後1年未満の子を育てる女性が請求した場合、1日2回各30分以上の育児時間を与えなければならない","生後3歳未満の子を持つ女性に適用","男性にも適用される","週に合計2時間以上の育児時間を与えれば足りる"],a:0,year:"H30",law:"労基法第67条",warn:"育児時間は「生後1年未満の子」を育てる「女性」が請求した場合に付与義務（男性は対象外）。1日2回×各30分以上が最低基準。育児・介護休業法と区別して覚える。",tip:"「生後1年・女性・1日2回30分」の3点"},
+{q:"労働基準法上の「帰郷旅費」について正しいものはどれか。",c:["すべての退職者に旅費を支給する義務がある","使用者が労働者を就業のために住居を変更させた場合、契約解除後に本人が希望する場合は帰郷旅費を支払わなければならない","帰郷旅費は賃金に含まれる","就業規則に定めがなければ支払義務はない"],a:1,year:"H28",law:"労基法第64条",warn:"住居変更を余儀なくされた労働者が退職・解雇後に帰郷する場合、使用者が旅費負担。ただし本人の責による解雇や自発的転職は適用外のケースあり。",tip:"「引越させた→帰りの費用も会社持ち」"},
+{q:"「労働基準監督署への申告」と不利益取扱いに関して正しいものはどれか。",c:["申告を理由とした解雇も一定の場合は適法","申告をしたことを理由として解雇等の不利益取扱いをすることは禁止","申告は労働組合を通じて行う必要がある","申告できるのは被保険者のみ"],a:1,year:"R元",law:"労基法第104条第2項",warn:"法104条2項は「申告を理由とした不利益取扱いの禁止」。申告権そのものは法104条1項。公益通報者保護法との関係も重要。",tip:"「申告→報復禁止」は労基法でも明文化"},
+{q:"「週休2日制」と「法定休日」の関係として正しいものはどれか。",c:["週休2日制を導入すれば両日ともに法定休日となる","法定休日は週1日（または4週4日）であり、所定休日と法定休日の区別が重要","法定休日は必ず日曜日でなければならない","週休2日制の両休日に割増賃金が必要"],a:1,year:"R3",law:"労基法第35条",warn:"「法定休日」（休日労働→35%割増）と「所定休日（法定外休日）」（残業扱い→25%割増）の区別が重要。就業規則で「どちらが法定休日か」明記推奨。",tip:"「1日目休日→残業25%、法定休日→35%」違いに注意"},
+{q:"「1か月単位の変形労働時間制」の総労働時間の計算として正しいものはどれか。",c:["1か月の暦日数×8時間","法定労働時間×（暦日数/7）×40時間","40時間×（暦日数/7）で計算した時間が上限","1か月で240時間以内"],a:2,year:"H30",law:"労基法第32条の2",warn:"「40時間×（その月の暦日数÷7）」が上限。例：28日＝160時間、30日＝171.4時間（端数切捨）、31日＝177.1時間（切捨）。計算問題が頻出。",tip:"「÷7×40」で1か月の上限時間を計算"},
+{q:"「1年単位の変形労働時間制」の1日の労働時間の上限として正しいものはどれか。",c:["8時間","10時間","12時間","14時間"],a:1,year:"R4",law:"労基法第32条の4",warn:"1年単位の変形労働時間制の1日上限は10時間（1週52時間）。特定期間（繁忙期）でも上限同じ。連続労働日数は6日以内（特定期間は1週1日休み取れれば12日まで）。",tip:"「1年変形→1日10時間・1週52時間」"},
+{q:"「企画業務型裁量労働制」を導入するために必要な手続きとして正しいものはどれか。",c:["就業規則への記載のみ","労使委員会の決議（5分の4以上）＋行政官庁への届出","労使協定の締結＋届出","取締役会の決議"],a:1,year:"R2",law:"労基法第38条の4",warn:"企画業務型裁量労働制は労使委員会（使用者側委員＋労働者側委員、同数）の5/4以上の決議が必要（専門業務型は過半数代表との労使協定）。",tip:"「企画型→5/4決議・委員会制度」"},
+{q:"「在籍型出向」に関する労働基準法上の取扱いとして正しいものはどれか。",c:["在籍型出向先の使用者には労基法は一切適用されない","出向元・出向先の使用者に対してそれぞれの指揮命令関係に応じた労基法上の義務が適用される","在籍型出向は労働契約の終了を意味する","出向元のみに全ての労基法上の義務がある"],a:1,year:"H29",law:"労基法第3条・最高裁判例",warn:"在籍型出向では出向元・出向先双方に使用者としての責任が発生（分担が複雑）。賃金は一般的に出向元負担だが協定により異なる。転籍（完全移籍）とは区別。",tip:"「在籍出向→2社に使用者責任が分配」"},
+{q:"「期間の定めのある労働契約（有期労働契約）」の「無期転換ルール」として正しいものはどれか。",c:["1年以上継続雇用されれば自動的に無期転換","同一の使用者との有期労働契約が通算5年を超えると労働者が申込みをすれば無期転換できる","60歳以上は無期転換対象外","無期転換後の労働条件は有期と同一でなければならない"],a:1,year:"R5",law:"労働契約法第18条",warn:"無期転換ルール（労契法18条）：通算5年超＋申込みで翌契約期間から無期。条件は別途定めがなければ転換前と同じ。専門的高度人材・定年後継続雇用は5年/10年の特例あり。",tip:"「5年超＋申込み→無期転換」（自動ではない）"},
+{q:"「クーリング期間」に関して、有期労働契約の通算期間算定から除外される空白期間として正しいものはどれか。",c:["1か月以上","3か月以上","6か月以上（通算期間が1年未満の場合は通算期間の2分の1以上）","1年以上"],a:2,year:"R3",law:"労働契約法第18条第2項",warn:"クーリング期間（空白期間6か月以上）が生じると通算期間がリセットされる（1年未満の場合は短縮あり）。クーリング目的の雇い止めは濫用に当たる可能性。",tip:"「6か月空白→カウントリセット」（悪用禁止）"},
+{q:"「雇い止めの法理」として正しいものはどれか。",c:["有期労働契約はいつでも更新を拒否できる","有期契約の反復更新等で実質的に期間の定めのない契約と同様の実態がある場合、客観的合理的理由なく更新拒絶できない","3回更新したら自動的に無期転換","雇い止めは解雇予告が不要"],a:1,year:"R4",law:"労働契約法第19条",warn:"雇い止め制限（法19条）：①実質無期契約と同様②更新合理的期待がある→客観的合理的理由・社会通念上相当性が必要。3回更新または1年以上継続の場合、30日前予告が必要（労基法施行規則）。",tip:"「期待があれば解雇と同じハードル」"},
+{q:"「使用者による安全配慮義務」に関して正しいものはどれか。",c:["安全配慮義務は労働安全衛生法のみが根拠","労働契約法5条で使用者に安全配慮義務が明文化されている","安全配慮義務は上場企業のみに適用","労働者の過失があれば使用者の安全配慮義務は免除される"],a:1,year:"R2",law:"労働契約法第5条",warn:"安全配慮義務は判例（陸上自衛隊事件・昭和50年）→労契法5条で明文化。債務不履行責任（民事）の問題。過失相殺は認められる場合あり（免除は不可）。",tip:"「安全配慮義務→労契法5条で明文化」"},
+{q:"「労働時間の通算」に関して正しいものはどれか（副業・兼業の場合）。",c:["副業・兼業の労働時間は通算しない","同一労働者の複数事業場での労働時間は労基法上通算される","副業先の使用者には時間外割増義務はない","副業は法律上禁止されている"],a:1,year:"R5",law:"労基法第38条",warn:"副業・兼業でも労基法38条により労働時間は通算される。時間外割増は後から雇用した使用者（または労使で協定した側）が負担。2020年厚労省ガイドライン参照。",tip:"「副業でも労働時間は通算される」"},
+{q:"「テレワーク（在宅勤務）」における労働時間管理として正しいものはどれか。",c:["テレワーク中は労基法の労働時間規制は適用されない","使用者はテレワーク中も労基法上の労働時間管理義務を負う","テレワーク中の時間外労働は割増賃金不要","テレワークには就業規則が不要"],a:1,year:"R4",law:"労基法第32条・厚労省ガイドライン",warn:"テレワークでも労基法全面適用。中抜け時間の取扱い・休憩の柔軟化・事業場外みなし労働時間制の適用要件など2021年改訂ガイドライン確認。",tip:"「テレワーク≠法外」→すべての労基法規制が適用"},
+{q:"「パワーハラスメント」に関して、労働施策総合推進法が規定する使用者の義務として正しいものはどれか。",c:["パワハラを行った労働者を即座に解雇する義務","相談体制の整備など雇用管理上必要な措置を講じる義務","年1回の研修実施義務","パワハラの定義を就業規則に記載する義務"],a:1,year:"R3",law:"労働施策総合推進法第30条の2",warn:"2019年改正（パワハラ防止法）：相談窓口設置・方針の明確化・相談対応・事後対応等の雇用管理措置が義務（中小企業は2022年4月から義務化）。",tip:"「相談体制整備＋方針明確化」が使用者の義務"},
+{q:"「過重労働防止」の観点から、面接指導の申出を行った労働者への不利益取扱いとして正しいものはどれか。",c:["申出を理由とした賃金カットは合法","申出を理由とした不利益取扱いは禁止","申出後3か月は解雇できない","申出により自動的に業務軽減される"],a:1,year:"R4",law:"労安衛法第66条の8第4項",warn:"面接指導申出・受診を理由とした解雇・雇い止め・降格・減給等の不利益取扱いは禁止（労安衛法66条の8第4項）。使用者の不利益取扱い禁止は多数の法律に規定。",tip:"「申出→不利益取扱い禁止」はほぼすべての申出権に共通"},
+{q:"「育児・介護休業法」と労働基準法の関係として正しいものはどれか。",c:["育介法は労基法の特別法として優先適用","労基法の産前産後休業は育介法の育児休業とは別制度","育介法の育児休業は産後8週以内からも取得できる","育介法は女性のみに適用される"],a:1,year:"R5",law:"労基法第65条・育介法",warn:"労基法の産前産後休業（産前6週・産後8週）と育介法の育児休業（子が1歳（最大2歳）まで）は別制度。産後パパ育休（出生時育児休業）は2022年10月創設。",tip:"「産前産後休業（労基）≠育児休業（育介法）」別制度"},
+{q:"「労働基準法違反」に対する罰則として最も重いものはどれか。",c:["強制労働の禁止違反","賃金不払い違反","就業規則不届出違反","年次有給休暇の取得妨害違反"],a:0,year:"H30",law:"労基法第117条",warn:"強制労働禁止違反（法5条）：1年以上10年以下の懲役または20万円以上300万円以下の罰金（最も重い）。賃金不払い：3年以下懲役または300万円以下罰金（法120条）。",tip:"「強制労働→最重罰（懲役1年以上10年以下）」"},
+],
+"労働安全衛生法":[
+{q:"労働安全衛生法の目的として正しいものはどれか。",c:["最低賃金の確保","職場における労働者の安全と健康の確保・快適な職場環境の形成促進","労働契約の適正化","労働組合活動の保護"],a:1,year:"R4",law:"労安衛法第1条",warn:"「安全と健康の確保」と「快適な職場環境」の2つが目的。労基法との関係（労基法の特別法）も把握すること。",tip:"「安全・健康・快適」の3キーワード"},
+{q:"安全衛生管理体制として、「総括安全衛生管理者」の選任義務が生じる事業場の規模（建設業・製造業）として正しいものはどれか。",c:["30人以上","50人以上","100人以上","300人以上"],a:2,year:"R3",law:"労安衛法第10条・令第2条",warn:"業種により規模が異なる：建設業・造船業→100人以上、製造業等→300人以上、その他（卸小売・サービス等）→1000人以上。試験では業種と人数の組合せで出題。",tip:"「建設→100、製造→300、その他→1000」"},
+{q:"「安全管理者」を選任すべき事業場として正しいものはどれか（製造業等の場合）。",c:["常時10人以上","常時30人以上","常時50人以上","常時100人以上"],a:2,year:"R5",law:"労安衛法第11条・令第3条",warn:"安全管理者選任義務：一定の業種（製造業・建設業等）で常時50人以上。衛生管理者も常時50人以上（全業種）。安全管理者は特定業種のみ、衛生管理者は全業種。",tip:"「50人以上で安全管理者・衛生管理者」"},
+{q:"「衛生管理者」の選任数として、常時1000人超の事業場では何人以上選任が必要か。",c:["1人","2人","3人","4人"],a:3,year:"R4",law:"労安衛規則第7条",warn:"衛生管理者の人数：200人以下→1人、201〜500人→2人、501〜1000人→3人、1001〜2000人→4人、2001〜3000人→5人、3001人以上→6人。",tip:"「200・500・1000・2000・3000」で区切って人数増"},
+{q:"「産業医」の職務として正しいものはどれか。",c:["賃金の決定","健康診断の実施・その結果に基づく措置に関すること・長時間労働者の面接指導等","採用面接の実施","労使間の交渉"],a:1,year:"R5",law:"労安衛法第13条",warn:"産業医の職務は省令で規定。健康診断・面接指導・職場巡視（少なくとも毎月1回、条件付きで2か月に1回可）・健康保持増進措置など。2017年改正で権限強化。",tip:"「産業医→健康管理の専門家」"},
+{q:"「安全委員会」を設置すべき事業場の要件として正しいものはどれか。",c:["すべての事業場","製造業・建設業等で常時50人以上","全業種で常時30人以上","危険業種のみ"],a:1,year:"R3",law:"労安衛法第17条",warn:"安全委員会：一定の危険業種（製造業・建設業等）で50人以上。衛生委員会：全業種50人以上。両方必要な場合は安全衛生委員会として一本化可。",tip:"「安全委員会→危険業種限定、衛生委員会→全業種」"},
+{q:"「安全衛生委員会（または衛生委員会）」の開催頻度として正しいものはどれか。",c:["2か月に1回以上","毎月1回以上","3か月に1回以上","年4回以上"],a:1,year:"R4",law:"労安衛規則第23条",warn:"毎月1回以上の開催義務。議事録は3年間保存。オンライン開催も可（2021年通達）。開催しなかった場合は罰則あり。",tip:"「委員会→毎月1回開催、議事録3年保存」"},
+{q:"「雇入れ時の安全衛生教育」の実施義務に関して正しいものはどれか。",c:["危険・有害業務に就く者のみ実施","すべての新規採用者に実施義務（一定の教育内容）","業種に関係なく実施","管理職のみ実施"],a:1,year:"R2",law:"労安衛法第59条第1項",warn:"雇入れ時教育は全業種・全労働者対象（一部業種は省略可な科目あり）。また作業変更時にも教育必要。「特別教育」（危険・有害業務従事者）とは別。",tip:"「雇入れ＋作業変更時に教育義務」"},
+{q:"「特別教育」が必要な業務として正しいものはどれか。",c:["コピー機の使用","アーク溶接・高圧電気取扱・フォークリフト（小型）等危険業務","一般事務作業","食品の調理"],a:1,year:"R5",law:"労安衛法第59条第3項",warn:"特別教育（法59条3項）は18歳未満含む危険・有害業務に必要。受講記録を3年間保存義務。技能講習（フォークリフト普通・クレーン等）とは別の概念。",tip:"「特別教育→記録3年保存」"},
+{q:"「作業主任者」を選任すべき作業として正しいものはどれか。",c:["一般清掃作業","高圧室内作業・特定化学物質の製造・取扱作業・土止め支保工作業等","軽作業全般","情報システム管理業務"],a:1,year:"R3",law:"労安衛法第14条・令第6条",warn:"作業主任者：政令で定める33種類の危険作業（高圧室内・有機溶剤・鉛・特定化学物質・放射線業務等）が対象。作業主任者は都道府県労働局長免許または技能講習修了者。",tip:"「作業主任者→33種の危険作業に必須」"},
+{q:"「定期健康診断」に関して正しいものはどれか。",c:["正社員のみ実施義務","常時使用する労働者に対し1年以内ごとに1回実施","6か月ごとに1回実施","特定業種のみ実施義務"],a:1,year:"R5",law:"労安衛規則第44条",warn:"定期健診：常時使用する労働者に年1回義務。パート等も所定労働時間が3/4以上なら対象（通達）。健診結果の記録は5年保存。結果を本人に通知義務あり。",tip:"「定期健診→年1回・記録5年保存」"},
+{q:"「特殊健康診断」の対象業務として正しいものはどれか。",c:["すべての業務","有機溶剤業務・鉛業務・特定化学物質業務等有害業務","夜間業務のみ","パソコン作業のみ"],a:1,year:"R4",law:"労安衛法第66条第2項",warn:"特殊健診は有害業務従事者に6か月以内ごとに1回。海外6か月以上派遣前後の健診も別途規定。歯科医師による健診（酸等取扱者）もあり。",tip:"「特殊健診→有害業務＋6か月ごと」"},
+{q:"「健康診断結果に基づく就業上の措置」として正しいものはどれか。",c:["異常所見者を全員解雇できる","異常所見がある者について医師の意見を聴き、必要に応じて就業場所の変更・作業転換等の措置を講じる","本人の同意なく措置できる","措置は任意で義務ではない"],a:1,year:"R3",law:"労安衛法第66条の5",warn:"医師等の意見聴取義務→就業上措置（就業禁止・作業転換・労働時間短縮等）→措置内容の記録・保存。本人への意見聴取（努力義務）・情報提供も重要。",tip:"「健診→意見聴取→措置→記録」のフロー"},
+{q:"「長時間労働者の面接指導」の義務が生じる時間外・休日労働時間数として正しいものはどれか。",c:["月40時間超","月60時間超","月80時間超","月100時間超"],a:2,year:"R5",law:"労安衛法第66条の8",warn:"申出があった場合（月80時間超）に面接指導義務。高度プロフェッショナル制度適用者は月100時間超で申出なくとも実施義務。研究開発業務者は月100時間超で申出なし。",tip:"「80時間→面接指導（申出必要）、100時間→研究開発・高プロ（申出不要）」"},
+{q:"「ストレスチェック制度」の実施義務が生じる事業場規模として正しいものはどれか。",c:["常時10人以上","常時30人以上","常時50人以上","すべての事業場"],a:2,year:"R4",law:"労安衛法第66条の10",warn:"50人以上は毎年1回実施義務（50人未満は当分の間努力義務）。面接指導の申出を阻害することや面接指導後の不利益取扱い禁止。集団分析・職場環境改善も推奨。",tip:"「ストレスチェック→50人以上で義務」"},
+{q:"「化学物質のリスクアセスメント」の実施義務対象として正しいものはどれか（2016年6月以降）。",c:["すべての化学物質","通知対象化学物質（SDS交付義務対象）","農薬のみ","食品添加物のみ"],a:1,year:"R5",law:"労安衛法第57条の3",warn:"2016年6月から通知対象化学物質（約2900種）についてリスクアセスメント実施が義務化。2023年改正で自律的管理（化学物質管理者選任等）が強化。",tip:"「RA→SDS対象化学物質が義務」"},
+{q:"「SDS（安全データシート）」の交付義務に関して正しいものはどれか。",c:["すべての化学物質について交付","特定の危険・有害化学物質の譲渡・提供時に交付義務","購入後1か月以内に交付","SDSは任意提供"],a:1,year:"R3",law:"労安衛法第57条の2",warn:"SDS交付義務対象（通知対象化学物質）：人体への影響・危険性が確認された一定の物質。SDSの記載項目は16項目（GHS対応）。電磁的方法による提供も可（2022年改正）。",tip:"「SDS→譲渡・提供時に交付義務」"},
+{q:"「特定化学物質障害予防規則（特化則）」における健康診断の頻度として正しいものはどれか。",c:["年1回","6か月以内ごとに1回","3か月ごとに1回","毎月1回"],a:1,year:"R4",law:"特化則第39条等",warn:"特化則の健診は6か月以内ごとに1回（一部物質は1年ごとの場合あり）。第3管理区分（管理濃度超過）では作業環境測定・医師の意見聴取・改善措置が義務。",tip:"「特化則健診→半年ごと（定期健診より頻繁）」"},
+{q:"「墜落・転落防止措置」として、作業床の端等に設置が必要な高さの基準として正しいものはどれか。",c:["高さ1m以上","高さ2m以上","高さ3m以上","高さ5m以上"],a:1,year:"R5",law:"労安衛規則第519条",warn:"高さ2m以上の箇所での作業：作業床設置→不可能な場合は墜落制止用器具（旧安全帯）使用。2019年改正で「安全帯」→「墜落制止用器具」に名称変更。",tip:"「2m以上→墜落防止措置必須」"},
+{q:"「機械等の定期自主検査」のうち「特定自主検査」について正しいものはどれか。",c:["毎月1回実施","有資格者が年1回以上実施（フォークリフト・車両系建設機械等）","使用者が任意に実施","月次と年次の両方が必要"],a:1,year:"R4",law:"労安衛法第45条",warn:"特定自主検査対象：フォークリフト・高所作業車・不整地運搬車・車両系建設機械等（令19条の2）。有資格者（検査業者または社内有資格者）が年1回以上実施。記録3年保存。",tip:"「特定自主検査→有資格者が年1回・記録3年」"},
+{q:"「労働安全衛生マネジメントシステム（OSHMS）」に関して正しいものはどれか。",c:["法律による強制義務","厚生労働省指針に基づく自主的管理システム（PDCAサイクル）","製造業のみに適用","外部機関の認証が必須"],a:1,year:"R3",law:"厚労省OSHMS指針（H11年）",warn:"OSHMSは強制ではなく自主的取り組み。ISO45001（国際規格）との対応関係も理解。リスクアセスメント→目標設定→実施→評価→改善のPDCAが基本。",tip:"「OSHMS→PDCAで継続改善（強制ではない）」"},
+{q:"「高圧室内作業主任者」の職務として正しいものはどれか。",c:["作業現場の清掃","作業方法の決定・指揮、加圧・減圧の確認、作業者の退避措置等","賃金の計算","採用面接の実施"],a:1,year:"H30",law:"高気圧作業安全衛生規則第11条",warn:"高圧室内作業主任者（都道府県労働局長免許）は潜函（ケーソン）・潜水業務の管理。減圧症（潜水病）防止のための加減圧管理が重要職務。",tip:"「高圧室内作業主任者→加減圧管理が最重要」"},
+{q:"「化学物質管理者」の選任が義務付けられるのはいつからか。",c:["2019年4月以降","2021年4月以降","2023年4月以降","2025年4月以降"],a:2,year:"R5",law:"労安衛規則第12条の5",warn:"2023年4月の労安衛規則改正でリスクアセスメント対象物を製造・取り扱う事業場に化学物質管理者の選任が義務化（規模問わず）。2024年4月には保護具着用管理責任者も義務化。",tip:"「化学物質管理者→2023年4月から義務」"},
+{q:"「特定元方事業者」の義務として正しいものはどれか。",c:["下請事業者の賃金を直接支払う","混在作業による労働災害防止のため、協議組織設置・作業間の連絡調整等を実施する義務","下請事業者の採用を決定する","下請事業者の安全管理者を選任する"],a:1,year:"R4",law:"労安衛法第30条",warn:"特定元方事業者（建設業・造船業の元請）：①協議組織設置②作業間連絡調整③作業場所の巡視（毎作業日に少なくとも1回）④安全衛生教育の指導・援助等の義務。",tip:"「元請→下請全体の安全管理に責任」"},
+{q:"「第三者災害（通行人等の巻き込み）」防止のための義務として正しいものはどれか。",c:["第三者への賠償は民法のみで対応","建設工事等の発注者・施工者は第三者の安全確保措置を講じる義務","第三者災害は労安衛法の対象外","労働者以外の安全は労安衛法の対象外"],a:1,year:"H29",law:"労安衛法第25条の2",warn:"重機・建設工事等では労働者以外（通行人・近隣住民等）への危険防止措置義務あり（法25条の2等）。元方安全衛生管理者制度も重要。",tip:"「労安衛法→労働者だけでなく第三者も守る規定あり」"},
+{q:"「元方安全衛生管理者」の選任義務が生じる事業場として正しいものはどれか。",c:["全業種の元方事業者","建設業の特定元方事業者で常時50人以上の労働者が就業する場合","造船業のみ","下請事業者が50社以上の場合"],a:1,year:"R3",law:"労安衛法第15条の2",warn:"元方安全衛生管理者：建設業の特定元方事業者で常時50人以上（ずい道等は常時30人以上）の労働者が就業する場合に選任義務。統括安全衛生責任者が選任した場合に補佐。",tip:"「建設業元方→50人以上→元方安全衛生管理者」"},
+{q:"「労働者死傷病報告」の提出が必要な場合として正しいものはどれか。",c:["すべての病気欠勤","労災による死亡または4日以上の休業（4日未満は四半期報告）","業務外の怪我も対象","遅刻・早退も報告対象"],a:1,year:"R5",law:"労安衛法第100条・施行規則第97条",warn:"4日以上の休業：遅滞なく報告（様式第23号）。4日未満の休業：1・4・7・10月の翌月末までに四半期報告（様式第24号）。休業日数の計算方法も出題あり。",tip:"「4日以上→即時、4日未満→四半期まとめ」"},
+{q:"「作業環境測定」の実施頻度として、有機溶剤業務を行う屋内作業場の場合に正しいものはどれか。",c:["年1回","6か月以内ごとに1回","3か月ごとに1回","毎月1回"],a:1,year:"R4",law:"有機溶剤中毒予防規則第28条",warn:"有機溶剤・特定化学物質・鉛・放射線・粉じん等の作業環境測定：6か月以内ごとに1回（一部は3か月）。測定結果の記録：3年保存（特定化学物質は30年等例外あり）。",tip:"「作業環境測定→半年ごと、記録→3年」"},
+{q:"「保護具の適切な使用」に関して、特定化学物質を扱う労働者に使用が義務付けられるものとして正しいものはどれか。",c:["ヘルメットのみ","呼吸用保護具・保護衣等（物質に応じた適切な保護具）","一般的なマスク","手袋のみ"],a:1,year:"R5",law:"特化則第43条等",warn:"特定化学物質によって必要な保護具が異なる。送気マスク・防毒マスク・防じんマスクの区別が重要。2023年改正で保護具着用管理責任者の選任義務化。",tip:"「保護具は化学物質の性質に合わせて選択」"},
+{q:"「熱中症予防対策」として使用者に求められる措置として正しいものはどれか。",c:["エアコン設置のみで足りる","WBGT（暑さ指数）の管理・休憩場所の確保・水分補給・作業者の健康状態確認等の措置","屋外作業は原則禁止","15分ごとの休憩が法定義務"],a:1,year:"R4",law:"労安衛法第71条の3・厚労省指針",warn:"WBGT（湿球黒球温度）が基準値超えたら作業時間制限・休憩増加等。熱中症は2010年から労災認定基準見直し。新規・未経験者の順化期間確保も重要。",tip:"「WBGT管理＋水分・休憩確保」が熱中症対策の核心"},
+{q:"「腰痛予防対策」として厚生労働省が示しているガイドラインの主な内容として正しいものはどれか。",c:["腰痛のリスクがある業務は全面禁止","作業態様に応じたリスクアセスメント・適切な作業姿勢確保・作業前後のストレッチ等の指導","腰痛は業務との因果関係がないため対策不要","自然治癒を待つことが原則"],a:1,year:"R3",law:"労安衛法・腰痛予防対策指針（H25年改訂）",warn:"2013年改訂ガイドラインは腰痛の多い職場（介護・看護・建設・運輸等）向け。リスクアセスメントの実施が追加。福祉・医療の介護作業向けガイドラインは特に重要。",tip:"「腰痛ガイドライン→RA実施＋姿勢・体操指導」"},
+{q:"「じん肺法」に定める合併症として認められているものはどれか。",c:["花粉症","結核・肺がん・続発性気管支炎・続発性気胸・原発性肺がん等","糖尿病","心臓病"],a:1,year:"H29",law:"じん肺法第2条・別表",warn:"じん肺の合併症：①肺結核②続発性気管支炎③続発性気管支拡張症④続発性気胸⑤原発性肺がんの5種。合併症になると管理区分にかかわらず療養が認められる。",tip:"「じん肺5合併症→肺結核・気管支・肺がん等」"},
+{q:"「特定粉じん作業」に従事する労働者の健康診断として正しいものはどれか。",c:["年1回の定期健診のみ","就業時および定期に（6か月以内ごと1回）じん肺健診を実施","特定粉じん作業は健診対象外","粉じん作業後1年間のみ健診実施"],a:1,year:"R4",law:"じん肺法第7条",warn:"じん肺健康診断：就業時・定期（管理区分1は3年以内ごと、2以上は1年以内ごとに1回）・定期外・離職時が規定。結果はじん肺管理区分（1〜4）に応じた措置。",tip:"「じん肺健診→管理区分に応じた頻度」"},
+{q:"「酸素欠乏危険作業」における規制として正しいものはどれか。",c:["特別の規制なし","酸素欠乏危険作業主任者の選任・酸素濃度測定・換気等の義務","一般の安全衛生管理で足りる","作業前に届出が必要"],a:1,year:"R5",law:"酸素欠乏症等防止規則",warn:"酸素欠乏：18%未満が危険（通常21%）。第1種（酸素欠乏）・第2種（酸素欠乏＋硫化水素）の区分あり。主任者選任・酸素（硫化水素）濃度測定・換気・救出体制が必要。",tip:"「酸素18%未満→危険、主任者選任必須」"},
+{q:"「過労死等防止対策推進法」における国・事業主・労働者の役割として正しいものはどれか。",c:["国だけが対策実施義務","国・事業主・労働者はそれぞれ過労死等防止対策に取り組む責務","過労死は個人の問題","事業主のみ罰則対象"],a:1,year:"R4",law:"過労死等防止対策推進法第3〜5条",warn:"2014年施行。国・地方公共団体・事業主・労働者それぞれの責務規定。11月が「過労死等防止啓発月間」。過労死等防止対策白書の年次公表義務あり。",tip:"「過労死防止法→国・事業主・労働者全員に責務」"},
+{q:"「職場環境の快適化」のための措置として労安衛法が事業者に求めているものとして正しいものはどれか。",c:["義務としての快適職場認定取得","継続的・計画的に快適な職場環境を形成するよう努める義務（努力義務）","一定規模以上の事業場は快適職場宣言が必要","空調設備の設置は義務"],a:1,year:"R3",law:"労安衛法第71条の2",warn:"快適職場形成は努力義務（義務ではない）。厚労省の「快適職場指針」がガイドとして機能。認定制度あり。強制力なき努力義務である点が重要。",tip:"「快適職場→努力義務（義務ではない）」"},
+{q:"「教育訓練（特別教育）」の記録保存期間として正しいものはどれか。",c:["1年","3年","5年","10年"],a:1,year:"R4",law:"労安衛規則第38条",warn:"特別教育の記録は3年間保存義務。技能講習の修了証は生涯有効（免許と同様）。各種検査・測定記録の保存期間も出題あり（3年・5年・30年等）。",tip:"「特別教育記録→3年保存」"},
+{q:"「面接指導対象者の記録」保存期間として正しいものはどれか。",c:["1年","3年","5年","10年"],a:2,year:"R5",law:"労安衛規則第52条の6",warn:"面接指導の記録は5年間保存（健康診断の結果記録も5年）。ストレスチェックの個人情報は5年保存。特化則等の健診記録は30年保存の場合もあり。",tip:"「面接指導・健診記録→5年保存」"},
+{q:"「高年齢労働者の安全・健康確保」として2020年に厚生労働省が策定したガイドラインの名称として正しいものはどれか。",c:["高年齢者雇用ガイドライン","エイジフレンドリーガイドライン","シニア職場安全指針","高年齢労働者健康白書"],a:1,year:"R4",law:"エイジフレンドリーガイドライン（R2年3月）",warn:"2020年3月策定「高年齢労働者の安全と健康確保のためのガイドライン（エイジフレンドリーガイドライン）」。転倒・腰痛・熱中症の予防に重点。",tip:"「エイジフレンドリー→高年齢労働者の安全ガイドライン」"},
+{q:"「産業医の職場巡視」の頻度として、産業医が毎月1回の代わりに2か月に1回以上でよい条件として正しいものはどれか。",c:["産業医の申請により変更可","事業者が産業医に所定の情報提供を毎月行い、産業医が同意した場合","労使協定締結の場合","常時500人未満の事業場の場合"],a:1,year:"R4",law:"労安衛規則第15条",warn:"2017年改正で産業医の権限強化。産業医の職場巡視：月1回が原則→事業者が毎月一定の情報提供（衛生管理者の巡視報告等）をし産業医が同意→2か月に1回以上可。",tip:"「産業医巡視→原則月1回、情報提供＋同意で2か月1回OK」"},
+{q:"「メンタルヘルス対策」として「4つのケア」に含まれないものはどれか。",c:["セルフケア（労働者本人）","ラインによるケア（管理監督者）","事業場外資源によるケア","行政機関によるケア"],a:3,year:"R3",law:"厚労省「心の健康づくり計画」指針",warn:"4つのケア：①セルフケア②ラインによるケア③事業場内産業保健スタッフ等によるケア④事業場外資源によるケア。行政機関（国・都道府県）は4つのケアに含まれない。",tip:"「セルフ・ライン・産保・外部資源」の4つ"},
+{q:"「テレワーク時の労働安全衛生管理」として使用者に求められることとして正しいものはどれか。",c:["テレワークでは安全衛生管理義務なし","テレワーク時も健康診断・メンタルヘルス対策等の安全衛生管理が必要","テレワークは在宅なので自己責任","IT機器は使用者から支給しなければならない"],a:1,year:"R5",law:"労安衛法・テレワークGL（R3年3月改訂）",warn:"テレワークでも健康診断・面接指導・ストレスチェック等の義務は継続。VDT作業（情報機器作業）ガイドライン遵守。コミュニケーション不足対策も重要。",tip:"「テレワーク≠安全衛生管理免除」"},
+],
+"雇用保険法":[
+{q:"雇用保険法の目的として正しいものはどれか。",c:["最低賃金の確保","失業等給付・育児休業給付の支給および就職促進・職業能力開発・雇用安定事業の実施","労使関係の安定化","医療保険の運営"],a:1,year:"R4",law:"雇用保険法第1条",warn:"雇用保険の3機能：①失業等給付（生活安定）②雇用継続給付（雇用維持）③雇用安定事業・能力開発事業（2事業）。育児休業給付は2020年4月以降独立した給付として法律上位置付け。",tip:"「失業給付＋雇用維持＋2事業」の3本柱"},
+{q:"雇用保険の被保険者要件として正しいものはどれか。",c:["正社員のみ","31日以上継続雇用見込み+週20時間以上の所定労働時間","月収10万円以上","週30時間以上の所定労働時間"],a:1,year:"R5",law:"雇用保険法第6条",warn:"2010年改正で被保険者要件が①31日以上継続雇用見込みに緩和。②週20時間以上は引き続き要件。学生は原則除外（昼間学生）。65歳以上も2017年以降加入可。",tip:"「31日＋週20時間」の2要件を暗記"},
+{q:"雇用保険の「基本手当」の受給要件（一般の離職者）として正しいものはどれか。",c:["離職前1年間に6か月以上の被保険者期間","離職前2年間に12か月以上の被保険者期間","離職前3年間に24か月以上の被保険者期間","被保険者期間の要件なし"],a:1,year:"R5",law:"雇用保険法第13条",warn:"一般受給資格者：離職前2年間に12か月以上。特定受給資格者等（倒産・解雇等）：離職前1年間に6か月以上で可。月賃金額が11日以上出勤した月を1か月として算定。",tip:"「一般：2年・12か月、特定：1年・6か月」"},
+{q:"「失業」の定義として正しいものはどれか。",c:["離職したすべての状態","就職の意思と能力があるにもかかわらず就職できない状態","収入がない状態","雇用保険離票を提出した状態"],a:1,year:"R3",law:"雇用保険法第4条第3項",warn:"失業の定義には①労働の意思（就職の意思）②労働の能力（健康状態等）③就職できない状態（客観的状況）の3要件が必要。病気・怪我・育児中でも状況次第で認定可。",tip:"「意思＋能力＋職なし＝失業」の3要件"},
+{q:"基本手当の「待機期間」として正しいものはどれか。",c:["3日間","7日間","14日間","30日間"],a:1,year:"R4",law:"雇用保険法第21条",warn:"待機（7日）は受給資格確認後すべての離職者に適用。自己都合退職はさらに給付制限（2か月、繰り返しの場合3か月）が加算。給付制限期間も待機に含まれない。",tip:"「待機7日→全員必須」（その後自己都合は+2か月制限）"},
+{q:"「特定受給資格者」に該当する理由として正しいものはどれか。",c:["自己都合退職","倒産・解雇・事業所閉鎖等会社都合による離職","定年退職","契約期間満了（合意更新あり）"],a:1,year:"R5",law:"雇用保険法第23条",warn:"特定受給：倒産・解雇・大量離職（被保険者数の1/3超）・事業所移転等。給付制限なし・所定給付日数優遇。「特定理由離職者」（期間満了等）とは区別要。",tip:"「会社都合→特定受給（給付制限なし・日数優遇）」"},
+{q:"基本手当の受給期間として正しいものはどれか（一般受給資格者）。",c:["離職日の翌日から1年間","離職日から1年6か月間","離職日の翌日から2年間","被保険者期間により異なる"],a:0,year:"R4",law:"雇用保険法第20条",warn:"受給期間：離職日の翌日から原則1年（365日）。この期間内に所定給付日数分を受給。病気等で受給できない場合は最大4年まで延長可。就職促進給付受給中は停止。",tip:"「受給期間1年→この中で所定日数を使い切る」"},
+{q:"所定給付日数について、「特定受給資格者・45歳以上45歳未満・被保険者期間5年以上10年未満」の場合の給付日数として正しいものはどれか。",c:["90日","120日","150日","180日"],a:2,year:"R3",law:"雇用保険法第23条第1項",warn:"特定受給資格者の給付日数は年齢と被保険者期間で異なる表を覚える必要あり。45〜60歳未満で被保険者5年以上は180日、5年未満（30歳未満含む各帯で異なる）。確認要。",tip:"「特定受給の給付日数→年齢×期間の表で確認」"},
+{q:"「訓練延長給付」として正しいものはどれか。",c:["資格取得時に一時金支給","公共職業安定所長の指示により公共職業訓練を受講中は所定給付日数超えても基本手当等継続支給","民間の資格取得スクールへの補助","就職後の能力開発補助"],a:1,year:"R5",law:"雇用保険法第24条",warn:"訓練延長給付：ハローワーク所長が指示した公共職業訓練を受ける場合に、受給期間・所定給付日数に関わらず訓練終了まで基本手当等を支給（最大2年延長）。",tip:"「ハロワ指示の訓練中→期間・日数を超えて支給」"},
+{q:"「個別延長給付」について正しいものはどれか。",c:["全員が申請できる","厚生労働大臣が指定する地域の受給資格者（就職困難者等）に最大60日延長","自己都合退職者も対象","延長申請に期限はない"],a:1,year:"R4",law:"雇用保険法第24条の2",warn:"個別延長給付：雇用状況が悪化している地域（激甚地域等）の受給資格者で就職困難な者に対し最大60日（一部90日）延長。厚生労働大臣が地域指定。",tip:"「個別延長→特定地域・就職困難者に最大60日」"},
+{q:"「技能習得手当」（受講手当・通所手当）について正しいものはどれか。",c:["職業訓練受講者全員に自動支給","公共職業安定所長の指示で公共職業訓練等を受ける受給資格者に基本手当と合わせて支給","民間スクール受講者も対象","受講後に一括支給"],a:1,year:"R3",law:"雇用保険法第36条",warn:"技能習得手当は受講手当（受講1日につき500円）と通所手当（交通費相当）からなる。ハロワ所長指示の訓練が条件。基本手当が支給される日のみ支給。",tip:"「技能習得手当→訓練日500円＋交通費」"},
+{q:"「傷病手当（雇用保険）」について正しいものはどれか。",c:["健康保険の傷病手当金と同じ制度","受給期間中に疾病・負傷等で就職できない場合、基本手当の代わりに支給","全員に支給","就職先で支給される"],a:1,year:"R5",law:"雇用保険法第37条",warn:"雇用保険の傷病手当：受給期間中に15日以上就職不能な場合に基本手当相当額が支給（健保の傷病手当金とは全く別制度・名称が紛らわしい）。",tip:"「雇保傷病手当≠健保傷病手当金」（別制度）"},
+{q:"「就職促進給付」のうち「再就職手当」の支給要件として正しいものはどれか。",c:["所定給付日数を全部使い切った後に就職","所定給付日数の3分の1以上を残して安定した職業に就いた場合","自己都合退職者は対象外","アルバイト就職でも支給"],a:1,year:"R4",law:"雇用保険法第56条の3",warn:"再就職手当：所定給付日数の1/3以上残して安定した職業に就いた場合に支給。支給額は残日数×基本手当日額×60%（2/3以上残なら70%）。自己都合でも要件満たせば可。",tip:"「1/3残→60%、2/3残→70%の再就職手当」"},
+{q:"「就業促進定着手当」の支給要件として正しいものはどれか。",c:["再就職後2年以上継続勤務した場合","再就職手当受給後、同じ事業主に6か月以上雇用継続された場合で再就職後の賃金が低下した場合","退職時の賃金より上昇した場合","転職なく同一企業での昇進時"],a:1,year:"R5",law:"雇用保険法第56条の3第4項",warn:"就業促進定着手当：再就職手当支給後、6か月以上同一事業主に雇用継続され、かつ再就職後6か月間の賃金が離職前賃金（基本手当の賃金日額×180）より低い場合に差額を支給。",tip:"「再就職手当→定着手当→賃金低下補填」の3段活用"},
+{q:"「高年齢受給資格者」の特例一時金について正しいものはどれか。",c:["基本手当の30日分","高年齢被保険者期間1年以上：50日分（1年未満：30日分）の一時金","基本手当を通常通り受給","65歳以上の給付はない"],a:1,year:"R4",law:"雇用保険法第37条の4",warn:"2020年改正で高年齢者（65歳以上）の特例一時金の支給日数が「30日分→50日分（1年以上）」に引上げ。高年齢求職者給付金として支給（一時金）。",tip:"「高年齢→一時金50日分（1年以上被保険者期間）」"},
+{q:"「雇用保険の2事業」として正しいものはどれか。",c:["失業給付事業と育児休業給付事業","雇用安定事業と能力開発事業","高年齢者雇用事業と障害者雇用事業","就職支援事業と職業訓練事業"],a:1,year:"R3",law:"雇用保険法第62条・63条",warn:"2事業：①雇用安定事業（雇用維持・再就職援助・地域雇用開発等）②能力開発事業（職業訓練・技能検定）。事業主のみが保険料を拠出（労働者は拠出なし）。",tip:"「2事業→安定＋能力開発（事業主のみ拠出）」"},
+{q:"「育児休業給付金」の支給率（休業開始から180日以降）として正しいものはどれか。",c:["休業開始時賃金日額の40%","休業開始時賃金日額の50%","休業開始時賃金日額の67%","休業開始時賃金日額の80%"],a:1,year:"R5",law:"雇用保険法第61条の7",warn:"育児休業給付金：開始〜180日目までは67%、181日目以降は50%（2025年改正で手取り8割相当になるよう段階的引上げ予定）。社会保険料免除との合算で手取り約8割。",tip:"「育休67%→180日後は50%」（前半が高い）"},
+{q:"「介護休業給付金」の支給要件として正しいものはどれか。",c:["介護施設への入所","家族を介護するための休業で一定要件を満たした場合に支給","医師の診断書が必要","配偶者のみが対象"],a:1,year:"R4",law:"雇用保険法第61条の6",warn:"介護休業給付：①介護休業取得②同一家族につき3回まで・通算93日まで③賃金が休業前の80%未満に低下の場合に支給（67%支給）。介護が必要な家族の範囲は法定。",tip:"「介護休業給付→67%・3回・93日」"},
+{q:"「教育訓練給付金（一般教育訓練）」の支給要件（初回）として正しいものはどれか。",c:["被保険者期間1年以上（初回）","被保険者期間3年以上","被保険者期間5年以上","勤続10年以上"],a:0,year:"R3",law:"雇用保険法第60条の2",warn:"一般教育訓練給付：初回は被保険者期間1年以上（2回目以降は3年以上）で受講費用の20%（上限10万円）。専門実践は3年以上で70%（最大80%）。特定一般は40〜80%。",tip:"「一般教育訓練→初回1年以上でOK」"},
+{q:"「雇用調整助成金」について正しいものはどれか。",c:["労働者が申請する","景気後退等で休業等を行う事業主に対して休業手当等の一部を助成（雇用安定事業の一環）","失業者への給付","廃業支援金"],a:1,year:"R5",law:"雇用保険法第62条",warn:"雇調金は雇用安定事業の一つで事業主向け助成金。コロナ禍での特例拡充が有名。労働者への直接給付ではなく、事業主が支給した休業手当等の一部を国が助成。",tip:"「雇調金→事業主が休業手当払う→国が補填」"},
+{q:"「特定一般教育訓練給付金」について正しいものはどれか。",c:["一般教育訓練給付金と同じ20%支給","受講費用の40%（上限20万円）が支給され、就職関連資格取得を目的とした訓練が対象","専門実践教育訓練と同じ扱い","受講後申請で受講前に仮払い不可"],a:1,year:"R4",law:"雇用保険法第60条の2第4項",warn:"2019年10月創設の特定一般教育訓練給付（40%・上限20万円）。ITSSレベル2以上・介護職員初任者研修・大型免許等の就職直結型資格訓練が対象。",tip:"「特定一般→40%（一般の2倍）」"},
+{q:"雇用保険の「日雇労働被保険者」について正しいものはどれか。",c:["1か月以上雇用される日雇い労働者","日々雇用される者または30日以内の期間雇用者で適用事業に雇用される者","週5日以上勤務する者","常用労働者と同じ扱い"],a:1,year:"R3",law:"雇用保険法第42条",warn:"日雇労働被保険者：日々雇用または31日未満の期間雇用。被保険者手帳に印紙（印紙保険料）を貼付。印紙の等級（1〜3級）により給付額が異なる。",tip:"「日雇→印紙保険料・手帳・31日未満」"},
+{q:"「短期雇用特例被保険者」の特例一時金について正しいものはどれか。",c:["基本手当と同じ","基本手当日額の30日分または50日分（繰上げ・繰下げ）","全額一括受給不可","受給資格が1年以上"],a:1,year:"R4",law:"雇用保険法第40条",warn:"短期雇用特例被保険者（季節的業務等）の特例一時金：原則50日分（繰下げ申請）、繰上げで30日分。受給資格は離職前1年間に6か月以上の被保険者期間。",tip:"「短期特例一時金→50日分（繰上げ30日分）」"},
+{q:"「失業認定」の手続きについて正しいものはどれか。",c:["1回の申請で全期間まとめて認定される","原則として4週間に1回、失業認定申告書を提出し認定を受ける","月1回の認定が原則","求職活動実績は不要"],a:1,year:"R5",law:"雇用保険法第22条",warn:"失業認定：原則4週間ごと（認定日は指定）にハロワに来所し認定申告書提出。認定期間中の就職・就業・求職活動状況を申告。求職活動（原則2回以上/認定期間）が条件。",tip:"「4週間ごとに失業認定→求職活動2回以上必要」"},
+{q:"「高年齢雇用継続基本給付金」の支給要件として正しいものはどれか。",c:["55歳以上65歳未満","60歳以上65歳未満で60歳到達時点の賃金の75%未満に低下した場合","60歳以上70歳未満","65歳以上の者"],a:1,year:"R4",law:"雇用保険法第61条",warn:"高年齢雇用継続基本給付：①60〜65歳未満②5年以上の被保険者期間③60歳以後の賃金が60歳時点の75%未満に低下の3要件。支給額は低下程度により15%〜0%で逓減。",tip:"「60〜65歳・75%未満低下→最大15%支給」"},
+{q:"雇用保険の「求職者給付」の種類として正しいものはどれか。",c:["基本手当のみ","基本手当・技能習得手当・寄宿手当・傷病手当","基本手当と就職手当のみ","基本手当と教育訓練給付のみ"],a:1,year:"R3",law:"雇用保険法第10条",warn:"求職者給付（一般被保険者）：①基本手当②技能習得手当（受講・通所）③寄宿手当④傷病手当の4種。技能習得手当は受講手当（500円/日）＋通所手当（交通費）。",tip:"「求職者給付→基本手当＋3つの附帯手当」"},
+{q:"「就職困難者」の所定給付日数（45歳以上65歳未満・一般）として正しいものはどれか。",c:["150日","180日","240日","360日"],a:3,year:"R4",law:"雇用保険法第22条第3項",warn:"就職困難者（障害者等）は年齢と被保険者期間で異なる。45〜65歳未満は被保険者期間1年以上で360日（最大）。30歳未満・30〜44歳・45〜65歳未満で区分あり。",tip:"「就職困難者→最大360日（通常の2倍以上も）」"},
+{q:"「育児休業給付金」の受給中に働いた場合の支給停止・減額について正しいものはどれか。",c:["少しでも働いたら全額不支給","就業日数が10日（10日超なら80時間）以下なら支給継続（一定就業日数以内）","就業日数・時間に関係なく支給","育休中の就業は一切禁止"],a:1,year:"R5",law:"雇用保険法第61条の7第5項",warn:"育休中の就業：就業日数が10日以下（または80時間以下）なら原則支給継続。就業した分の賃金と給付金の合計が休業前賃金の80%を超えると減額・支給停止。",tip:"「育休就業→10日（80時間）以内なら給付継続」"},
+{q:"「産後パパ育休（出生時育児休業）」の給付として正しいものはどれか。",c:["育児休業給付金とは別の給付（出生時育児休業給付金）が支給される","産後パパ育休中は無給で給付なし","介護休業給付金が適用","産後パパ育休は雇用保険対象外"],a:0,year:"R5",law:"雇用保険法第61条の8",warn:"2022年10月創設の産後パパ育休（出生時育児休業）に対応して出生時育児休業給付金が新設。支給率は67%（育休給付と同じ）。分割取得（2回まで）が特徴。",tip:"「産後パパ育休→出生時育休給付金67%・2回分割可」"},
+{q:"雇用保険料の負担割合について正しいものはどれか（2023年度以降）。",c:["労使折半","事業主負担分が労働者より多い","労働者負担分が事業主より多い","全額事業主負担"],a:1,year:"R5",law:"雇用保険法第68条",warn:"雇用保険料は事業主・労働者双方が負担するが、2事業（雇用安定・能力開発）分は事業主のみ負担するため事業主負担が大きい。具体的な料率は毎年厚生労働省告示で確認。",tip:"「事業主負担＞労働者負担（2事業分が加算）」"},
+{q:"「雇用保険法の適用事業」について正しいものはどれか。",c:["製造業・建設業のみ","農林水産業の一部を除き労働者を1人以上雇用するすべての事業","常時5人以上の事業のみ","週30時間以上の事業場のみ"],a:1,year:"R4",law:"雇用保険法第5条",warn:"強制適用事業：農林水産業5人未満の個人事業（暫定任意適用）以外はすべて適用。個人経営の農水産業5人未満は任意加入。労働者が1人でも雇用していれば強制適用。",tip:"「農水産業小規模除きほぼ全事業に強制適用」"},
+],
+"健康保険法":[
+{q:"健康保険法の保険者として正しいものはどれか。",c:["厚生労働省","全国健康保険協会（協会けんぽ）と健康保険組合","市区町村","都道府県"],a:1,year:"R4",law:"健保法第4・7条",warn:"保険者：①全国健康保険協会（協会けんぽ）：主に中小企業労働者②健康保険組合：主に大企業が設立。日雇労働者は日雇特例被保険者制度。後期高齢者医療は広域連合。",tip:"「健保→協会けんぽ＋健保組合の2種」"},
+{q:"健康保険の被保険者となれない者として正しいものはどれか。",c:["パートタイム労働者","後期高齢者（75歳以上）","週30時間勤務の労働者","契約社員"],a:1,year:"R5",law:"健保法第3条",warn:"75歳以上は後期高齢者医療制度へ移行し、健康保険の被保険者資格を喪失。70〜74歳は前期高齢者（一部負担2割）として健保継続。健保法3条で適用除外者を規定。",tip:"「75歳→後期高齢者医療に移行・健保は喪失」"},
+{q:"健康保険の「任意継続被保険者」になるための手続きとして正しいものはどれか。",c:["退職後1か月以内に申請","資格喪失日から20日以内に申請","退職後3か月以内に申請","いつでも申請可能"],a:1,year:"R4",law:"健保法第37条",warn:"任意継続：資格喪失日（退職翌日）から20日以内に申請→最大2年継続可。保険料は全額自己負担（事業主負担なし）。2022年改正で任意の申出による資格喪失が可能に。",tip:"「任意継続→退職後20日以内・最大2年・全額自己負担」"},
+{q:"健康保険の「標準報酬月額」の等級として正しいものはどれか。",c:["10等級","30等級（50等級まで）","50等級","100等級"],a:1,year:"R3",law:"健保法第40条",warn:"標準報酬月額：第1級（5.8万円）〜第50級（139万円）の50等級。定時決定（4・5・6月の平均で7月改定）・随時改定（固定的賃金変動＋2か月で2等級差）が重要。",tip:"「標準報酬→50等級、4・5・6月平均で改定」"},
+{q:"「定時決定」について正しいものはどれか。",c:["毎年1月に改定","4月・5月・6月の報酬の平均を基に7月に改定（9月から翌8月適用）","随時届け出て改定","就職時のみ決定"],a:1,year:"R5",law:"健保法第41条",warn:"定時決定：4〜6月の支払賃金平均→7月1日現在の被保険者に算定基礎届提出→9月1日から改定（8月31日まで適用）。パート等は「特定適用事業所」での取扱いに注意。",tip:"「4・5・6月→9月改定→翌8月まで適用」"},
+{q:"「随時改定」の要件として正しいものはどれか。",c:["賃金が1円でも変わった場合","固定的賃金の変動があり、変動月から3か月の平均標準報酬月額との差が2等級以上になった場合","年1回の申請","事業主の申請のみで改定"],a:1,year:"R4",law:"健保法第43条",warn:"随時改定要件：①固定的賃金（基本給・手当等）に変動②変動月から3か月連続して支払いあり③3か月の報酬平均が現標準報酬月額と2等級以上差異の3つをすべて満たす。",tip:"「固定的賃金変動＋3か月後＋2等級差→随時改定」"},
+{q:"健康保険の「療養の給付」における自己負担割合（70歳未満の一般被保険者）として正しいものはどれか。",c:["1割","2割","3割","5割"],a:2,year:"R5",law:"健保法第74条",warn:"自己負担：70歳未満3割、義務教育就学前2割、70〜74歳2割（現役並み所得者3割）、75歳以上1割（現役並み3割・一定所得者2割）。",tip:"「70歳未満→3割」（70歳境界が基本）"},
+{q:"「高額療養費制度」について正しいものはどれか。",c:["医療費が全額無料になる","同一月の自己負担が自己負担限度額を超えた場合に超過分が支給される（外来も対象）","入院のみ対象","申請不要で自動支給"],a:1,year:"R4",law:"健保法第115条",warn:"高額療養費：所得区分（標準報酬月額）で限度額が異なる（所得が高いほど限度額高い）。多数回該当の特例（直近12か月で4回目以降）あり。事前に認定証取得で窓口負担軽減。",tip:"「同一月の自己負担超過分を払戻→所得別に限度額」"},
+{q:"「傷病手当金」の支給要件として正しいものはどれか。",c:["業務上の傷病による休業","業務外の傷病で療養のため就労不能・4日目（待期3日後）から支給","在宅療養は対象外","事業主が証明書を書けば即支給"],a:1,year:"R5",law:"健保法第99条",warn:"傷病手当金：業務外傷病＋就労不能＋継続3日間の待期（公休・有給含む）後、4日目から支給。連続3日が待期となるため、飛び飛びの欠勤では待期不成立の場合あり。",tip:"「業務外傷病→待期3日→4日目から支給」"},
+{q:"傷病手当金の支給額（1日あたり）として正しいものはどれか。",c:["標準報酬月額の60%","支給開始前12か月の標準報酬月額平均÷30×3分の2","一律5000円","基本給の2分の1"],a:1,year:"R5",law:"健保法第99条第2項",warn:"傷病手当金：（支給開始前12か月の標準報酬月額平均÷30）×2/3。12か月に満たない場合は①全被保険者の標準報酬月額平均か②実際の月平均のいずれか低い額を使用。",tip:"「傷病手当金=標準報酬日額×2/3」"},
+{q:"傷病手当金の支給期間（2022年1月改正後）として正しいものはどれか。",c:["支給開始から1年","支給開始から通算1年6か月","支給開始から通算2年","無制限"],a:1,year:"R5",law:"健保法第99条第4項",warn:"2022年1月改正：支給期間が「支給開始から1年6か月（暦）」→「通算1年6か月」に変更。途中就労・復帰→再入院でも通算1年6か月まで受給可能に。",tip:"「傷病手当金→通算1年6か月（2022年改正）」"},
+{q:"「出産手当金」の支給期間として正しいものはどれか。",c:["産前42日・産後42日","産前56日（多胎98日）・産後56日の就労しなかった期間","出産当日前後各30日","産後90日間"],a:1,year:"R4",law:"健保法第102条",warn:"出産手当金：産前56日（多胎98日）・産後56日のうち就業しなかった期間に支給。金額は標準報酬日額×2/3（傷病手当金と同じ計算方法）。有給取得期間も調整あり。",tip:"「出産手当金→産前56日・産後56日（多胎は98日）」"},
+{q:"「出産育児一時金」の支給額（産科医療補償制度加入機関・2023年4月以降）として正しいものはどれか。",c:["42万円","48万8千円","50万円","55万円"],a:2,year:"R5",law:"健保法第101条",warn:"2023年4月から50万円に引上げ（産科医療補償制度対象外は48.8万円）。直接支払制度（医療機関へ直接支払う）・受取代理制度（小規模施設等）を活用が一般的。",tip:"「出産育児一時金→2023年4月から50万円」"},
+{q:"健康保険の「被扶養者」の認定要件（収入面）として正しいものはどれか。",c:["年収80万円未満","年収103万円未満","年収130万円未満（60歳以上・障害者は180万円未満）かつ被保険者年収の2分の1未満","年収200万円未満"],a:2,year:"R4",law:"健保法第3条第7項",warn:"被扶養者の収入要件：130万円未満（60歳以上・障害者180万円未満）かつ被保険者年収の1/2未満（例外あり）。「同一世帯」か「別居」かで取扱いが異なる。",tip:"「被扶養→130万円（高齢・障害180万円）＋1/2基準」"},
+{q:"「保険外併用療養費（選定療養・評価療養）」について正しいものはどれか。",c:["保険診療と自由診療は一切組み合わせられない","一定の保険外診療（評価療養・選定療養・患者申出療養）と保険診療の組み合わせが認められる","自己負担は一切なし","特定の疾患のみ対象"],a:1,year:"R3",law:"健保法第86条",warn:"混合診療の原則禁止の例外として保険外併用療養費制度がある。評価療養（未承認薬等）・選定療養（差額ベッド・時間外診療等）・患者申出療養の3種類。",tip:"「混合診療禁止の例外→評価・選定・患者申出の3類型」"},
+{q:"「訪問看護療養費」の支給について正しいものはどれか。",c:["医師の指示不要","居宅で療養中の者が指定訪問看護を受けた場合、医師の指示に基づき支給","入院中の者も対象","申請なしに自動支給"],a:1,year:"R5",law:"健保法第88条",warn:"訪問看護療養費：居宅で療養（難病・重度障害等）の被保険者が、医師の指示を受けた指定訪問看護事業者から訪問看護を受けた場合に支給。自己負担は3割。",tip:"「訪問看護→居宅療養中＋医師指示で支給」"},
+{q:"「特定療養費」の廃止と「保険外併用療養費」への統合はいつ行われたか。",c:["2000年","2006年","2012年","2018年"],a:1,year:"R3",law:"健保法第86条（H18年改正）",warn:"2006年（H18年）の健保法改正で特定療養費が廃止→「保険外併用療養費（評価療養＋選定療養）」に再編。評価療養は高度先進医療を引き継ぎ発展。",tip:"「保険外併用→2006年改正で創設」"},
+{q:"「埋葬料・埋葬費」について正しいものはどれか。",c:["被保険者が死亡した場合のみ5万円","被保険者・被扶養者の死亡で5万円（被扶養者の場合は家族埋葬料）","3親等以内の親族の埋葬費全額","申請期限なし"],a:1,year:"R4",law:"健保法第100・113条",warn:"埋葬料：被保険者が死亡した際、埋葬を行う者に5万円。被扶養者が死亡した場合は家族埋葬料として5万円。埋葬を行う者がいない場合は埋葬を行った者に埋葬費（5万円の範囲内）。",tip:"「埋葬料・家族埋葬料→一律5万円」"},
+{q:"「資格喪失後の給付継続（継続給付）」の要件として正しいものはどれか。",c:["退職後すぐに受給できる","退職日の前日まで継続1年以上被保険者であり、かつ資格喪失時に受給中の場合","任意継続被保険者になれば常に継続給付","社会保険の種類を問わず継続給付される"],a:1,year:"R5",law:"健保法第104条",warn:"継続給付の要件：①退職前に継続して1年以上の被保険者期間②資格喪失時（退職時）に傷病手当金等を受給中（または受給要件充足中）。傷病手当金・出産手当金が対象。",tip:"「1年以上加入＋退職時受給中→継続給付可」"},
+{q:"健康保険組合の「付加給付」について正しいものはどれか。",c:["法定給付のみで付加給付は禁止","健保組合は規約に基づき法定給付に上乗せした独自の付加給付が可能","全健保組合が同じ付加給付","付加給付には政府承認が必要"],a:1,year:"R3",law:"健保法第53条",warn:"健保組合は規約に基づき付加給付を行うことが可能（協会けんぽは付加給付なし）。一部負担還元金・附加金・家族療養付加金等が典型例。保険料率も独自設定可。",tip:"「健保組合→規約で独自付加給付OK（協会けんぽは不可）」"},
+{q:"「入院時食事療養費」について正しいものはどれか。",c:["入院中の食事は全額保険給付","被保険者が標準負担額を負担し、残りを入院時食事療養費として給付（現物給付）","入院費に食事代は含まれない","住民税非課税世帯は全額給付"],a:1,year:"R4",law:"健保法第85条",warn:"入院時食事療養費：被保険者が標準負担額（1食460円・住民税非課税等は軽減）を負担し、残りを保険者が医療機関に支払う。長期入院・低所得者の標準負担額軽減あり。",tip:"「食事療養→患者が1食負担額を払い残りを保険が負担」"},
+{q:"「保険料の徴収方法」として、健康保険料の翌月控除について正しいものはどれか。",c:["当月分保険料を当月に控除","当月分保険料を翌月に控除（翌月控除が原則）","保険料は事業主が全額立替え","年払い一括控除"],a:1,year:"R5",law:"健保法第167条",warn:"健保料の徴収：当月分を翌月の給与から控除が原則（翌月控除）。一部の会社は当月控除を採用（就業規則で定めた場合等）。退職月の保険料控除の取扱いに注意。",tip:"「健保料→当月分を翌月控除が原則」"},
+{q:"「保険給付の時効」について正しいものはどれか。",c:["1年","2年","3年","5年"],a:1,year:"R4",law:"健保法第193条",warn:"健保の保険給付を受ける権利の時効：2年（保険料返還請求権も2年）。保険料の徴収権は2年（または3年）。療養費・傷病手当金等の申請は2年以内に行う必要がある。",tip:"「健保の時効→2年」（労基の賃金3年と区別）"},
+{q:"「協会けんぽ」の都道府県単位保険料率について正しいものはどれか。",c:["全国一律の保険料率","都道府県ごとに異なる保険料率（医療費の地域差を反映）","企業規模に応じて決定","毎月変動する"],a:1,year:"R5",law:"健保法第160条の2",warn:"協会けんぽは2009年から都道府県単位で保険料率を設定（医療費の地域格差を反映）。毎年3月に翌年度の料率を決定。高い県・低い県の傾向を把握しておくとよい。",tip:"「協会けんぽ→都道府県別保険料率（2009年から）」"},
+{q:"「特定適用事業所」に勤めるパートタイム労働者の健康保険適用拡大の要件（2022年10月以降）として正しいものはどれか。",c:["週20時間以上かつ月収5.8万円以上（年収70万円相当）かつ2か月超雇用見込み","週20時間以上かつ月収8.8万円以上（年収106万円相当）かつ2か月超雇用見込みかつ学生でない","月収10万円以上のみ","週30時間以上"],a:1,year:"R5",law:"健保法第3条第8項",warn:"2022年10月〜：特定適用事業所（101人以上→2024年10月から51人以上）で①週20時間以上②月収8.8万円以上③2か月超雇用見込み④学生でないの4要件全充足。",tip:"「106万円の壁→月8.8万円・週20時間・101人以上（→51人）」"},
+],
+"国民年金法":[
+{q:"国民年金法の目的として正しいものはどれか。",c:["最低賃金の確保","老齢・障害・死亡に関して年金や一時金を支給し国民生活の安定に寄与","医療費の給付","雇用の安定"],a:1,year:"R4",law:"国年法第1条",warn:"国民年金は「老齢・障害・死亡」という3つの保険事故に備える社会保険。1階部分（基礎年金）として、全国民共通の基盤を形成。2階は厚生年金（被用者年金）。",tip:"「国民年金→老齢・障害・死亡の3保険事故」"},
+{q:"国民年金の第1号被保険者として正しいものはどれか。",c:["厚生年金加入の会社員","会社員に扶養される20歳以上60歳未満の配偶者","自営業者・農業者・学生・無職者（20歳以上60歳未満・国内居住）","65歳以上の者"],a:2,year:"R5",law:"国年法第7条第1項",warn:"第1号：国内居住の20〜60歳未満で2号・3号以外の者。第2号：厚生年金・共済加入の被用者（年齢制限なし）。第3号：第2号の被扶養配偶者（20〜60歳未満）。",tip:"「1号＝自営業等、2号＝会社員等、3号＝扶養配偶者」"},
+{q:"国民年金の保険料が「法定免除」される事由として正しいものはどれか。",c:["失業した場合","障害基礎年金（1・2級）受給者・生活保護生活扶助受給者等","育児休業中","学生の場合"],a:1,year:"R4",law:"国年法第89条",warn:"法定免除：①障害年金1・2級受給者②生活保護生活扶助受給者③ハンセン病療養所等入所者。届出が必要（自動免除ではない）。学生・失業は申請免除・納付猶予の対象。",tip:"「法定免除→障害1・2級か生活保護生活扶助受給者」"},
+{q:"「保険料の全額免除」が認められた期間の老齢基礎年金への算入方法（2009年4月以降）として正しいものはどれか。",c:["全く算入されない","保険料納付済期間の2分の1として算入（国庫負担割合）","保険料納付済期間と同じ（1として）算入","4分の1として算入"],a:1,year:"R5",law:"国年法第27条",warn:"2009年4月以降の全額免除期間は国庫負担相当（1/2）として年金額計算に算入。追納すれば満額換算。2009年4月前の旧制度（1/3）との区分が試験頻出。",tip:"「全額免除→年金額は1/2（2009年以降）」"},
+{q:"老齢基礎年金の「受給資格期間」として正しいものはどれか（2017年8月以降）。",c:["25年（300か月）","10年（120か月）","20年（240か月）","40年（480か月）"],a:1,year:"R5",law:"国年法第26条",warn:"2017年8月の改正で受給資格期間が25年から10年に短縮。保険料納付済・免除・合算対象期間（カラ期間）の合計が10年以上で受給権発生。",tip:"「受給資格→10年（120か月）以上」（2017年8月改正）"},
+{q:"「カラ期間（合算対象期間）」に含まれるものとして正しいものはどれか。",c:["保険料を完納した期間","昭和61年3月以前に任意加入しなかった専業主婦期間・海外居住期間等","保険料免除期間","学生納付特例期間"],a:1,year:"R3",law:"国年法附則第8条",warn:"カラ期間：受給資格期間にはカウントするが年金額には反映されない期間。昭和61年3月以前の専業主婦・学生・海外居住期間等。「加算はされないが受給資格には算入」。",tip:"「カラ期間→資格にカウント・年金額には反映なし」"},
+{q:"老齢基礎年金の「繰上げ受給」の減額率（2022年4月改正後：1962年4月2日以降生まれ）として正しいものはどれか。",c:["1か月当たり0.3%","1か月当たり0.4%","1か月当たり0.5%","1か月当たり1.0%"],a:1,year:"R5",law:"国年法第28条",warn:"2022年4月改正：繰上げ減額率0.5%→0.4%/月に変更（1962年4月2日以降生まれ）。最大繰上げ60か月×0.4%＝24%減。繰上げ後は障害基礎年金が支給停止等の不利益あり。",tip:"「繰上げ→0.4%/月減（2022年改正後）」"},
+{q:"老齢基礎年金の「繰下げ受給」について正しいものはどれか。",c:["70歳まで繰り下げ可能","75歳まで繰下げ可能（1か月あたり0.7%増）","繰下げすると遺族年金に影響なし","繰下げ後は減額される"],a:1,year:"R5",law:"国年法第28条",warn:"2022年4月改正で繰下げ上限が70歳から75歳に延長。0.7%×繰下げ月数（最大60か月×0.7%＝42%→84か月×0.7%＝58.8%増）。在職老齢年金との関係に注意。",tip:"「繰下げ→75歳まで可・0.7%/月増（最大58.8%増）」"},
+{q:"「障害基礎年金」の支給要件（保険料納付要件）として正しいものはどれか。",c:["初診日の前日において全期間納付済","初診日の前日時点で初診日前々月までの被保険者期間の2/3以上が納付済・免除期間（特例：直近1年間未納なし）","保険料に関係なく支給","初診日から1年以内に納付"],a:1,year:"R4",law:"国年法第30条",warn:"保険料納付要件（2要件のどちらかを満たせばOK）：①初診日前々月までの全被保険者期間の2/3以上が納付済・免除②特例：初診日前1年間に未納なし（65歳未満）。",tip:"「障害基礎年金→2/3要件か直近1年未納なし特例」"},
+{q:"障害基礎年金の等級と支給額（1級と2級の関係）として正しいものはどれか。",c:["1級と2級は同額","1級は2級の1.25倍","1級は2級の1.5倍","1級は2級の2倍"],a:1,year:"R5",law:"国年法第33条",warn:"障害基礎年金の支給額：1級＝満額老齢基礎年金×1.25（子の加算あり）、2級＝満額老齢基礎年金（子の加算あり）。「1.25倍」の関係が頻出。",tip:"「障害1級=2級×1.25倍」（1.25は頻出数字）"},
+{q:"「遺族基礎年金」の受給権者として正しいものはどれか。",c:["配偶者であれば子の有無を問わず受給可","死亡した者の子のある配偶者（または子）","父母・祖父母","兄弟姉妹"],a:1,year:"R5",law:"国年法第37条の2",warn:"遺族基礎年金の受給権者：①子のある配偶者②子（18歳年度末まで、障害1・2級は20歳まで）。子のない配偶者は受給不可（2014年改正で父子家庭も対象）。",tip:"「遺族基礎→子のある配偶者か子のみが対象」"},
+{q:"「寡婦年金」の支給期間として正しいものはどれか。",c:["夫の死亡時から10年間","妻が60歳から65歳になるまで（5年間）","終身","2年間"],a:1,year:"R4",law:"国年法第49条",warn:"寡婦年金：①第1号被保険者期間10年以上の夫が死亡②老齢・障害の年金を受けたことがない③婚姻期間10年以上の妻に60〜65歳の間支給。死亡一時金との選択。",tip:"「寡婦年金→60〜65歳の間（5年）、婚姻10年以上」"},
+{q:"「死亡一時金」の受給要件として正しいものはどれか。",c:["遺族基礎年金を受給できる場合も支給","第1号被保険者として保険料を36か月以上納付し遺族基礎年金を受給できる遺族がいない場合","任意加入者の遺族は対象外","外国籍の遺族は対象外"],a:1,year:"R3",law:"国年法第52条の2",warn:"死亡一時金と寡婦年金の選択制（一方を受給すると他方は不支給）。受給できる遺族：配偶者・子・父母・孫・祖父母・兄弟姉妹（優先順位あり）。",tip:"「死亡一時金と寡婦年金→選択制（どちらか一方）」"},
+{q:"「付加年金」の仕組みとして正しいものはどれか。",c:["第2号被保険者も加入できる","第1号被保険者が月400円の付加保険料を納付→老齢基礎年金に200円×付加保険料納付月数を上乗せ","国民年金基金と併用可能","付加年金は遺族・障害にも上乗せ"],a:1,year:"R5",law:"国年法第43条",warn:"付加年金：第1号被保険者（任意加入含む）のみ加入可。国民年金基金に加入している者は不可（どちらかの選択）。2年で元が取れる（400×12月×N年→200×12×N年を年金でもらう）。",tip:"「付加年金→400円払い→200円×月数が上乗せ（2年で元取れ）」"},
+{q:"「国民年金基金」について正しいものはどれか。",c:["第2号被保険者も加入できる","第1号被保険者が任意加入する上乗せ年金（付加年金と選択）","全国民が加入義務","都道府県単位にしかない"],a:1,year:"R4",law:"国年法第115条",warn:"国民年金基金：地域型・職能型（全国型）がある。保険料が全額社会保険料控除対象（節税効果）。付加年金との選択制（国年基金加入→付加年金不可）。掛金に上限あり。",tip:"「国民年金基金→第1号限定・付加年金との選択制」"},
+{q:"「学生納付特例制度」について正しいものはどれか。",c:["保護者の所得も審査される","本人の所得が基準以下の学生の保険料納付が猶予され、追納しなければ年金額に反映されない","猶予期間は受給資格期間に算入されない","適用は大学生のみ"],a:1,year:"R5",law:"国年法第90条の3",warn:"学生特例：本人所得基準（133万円以下等）で審査（保護者所得は不問）。受給資格期間には算入、年金額には反映なし（追納で改善）。追納できるのは10年以内。",tip:"「学生特例→本人所得のみ審査・追納で年金額改善」"},
+{q:"「保険料の追納」ができる期間として正しいものはどれか。",c:["免除等承認の翌年度から5年以内","免除等承認の翌年度から10年以内","免除承認年度内のみ","追納制度はない"],a:1,year:"R4",law:"国年法第94条",warn:"追納：免除・猶予（学生特例・納付猶予）が承認された月の属する年度の翌年度から10年以内。3年度以上経過分は加算率が乗じられる（利子相当）。",tip:"「追納→10年以内、3年超は加算あり」"},
+{q:"「振替加算」の制度として正しいものはどれか。",c:["老齢厚生年金から基礎年金への振替","配偶者が65歳到達等で加給年金終了時に昭和41年4月1日以前生まれの妻の老齢基礎年金に加算","男女ともに同額","平成生まれの妻も対象"],a:1,year:"R5",law:"国年法附則第14条",warn:"振替加算：昭和41年4月1日以前生まれの妻（旧3号期間等が不利だった世代）を救済。加算額は生年月日により異なる逓減方式。対象者が高齢になるにつれ加算額は減少。",tip:"「振替加算→昭和41年4月1日以前生まれの妻（老世代救済）」"},
+{q:"「任意加入被保険者」になれる者として正しいものはどれか。",c:["60歳以上65歳未満で受給資格期間未充足等の国内居住者・海外居住日本人","すべての65歳以上","厚生年金加入者","第3号被保険者"],a:0,year:"R4",law:"国年法附則第5条",warn:"任意加入：①国内居住の60歳以上65歳未満で受給資格期間未充足等②海外在住の日本国籍者（20〜65歳未満）が対象。特例任意加入（受給資格満たすまで70歳まで延長）もあり。",tip:"「任意加入→60〜65歳未満（国内）、または海外在住日本人」"},
+{q:"老齢基礎年金の年金額の計算式として正しいものはどれか。",c:["満額×（保険料納付済月数÷480）","満額×（保険料納付済月数＋免除等算入月数）÷480","満額×（在籍月数÷480）","一律満額支給"],a:1,year:"R5",law:"国年法第27条",warn:"年金額＝満額×（保険料納付済月数＋免除等の按分算入月数）÷480（40年×12月）。全額免除は1/2、3/4免除は5/8、半額免除は3/4、1/4免除は7/8の割合で算入（2009年4月以降）。",tip:"「年金額の分母は480（40年分）」"},
+{q:"国民年金の「産前産後期間の保険料免除」（2019年4月創設）について正しいものはどれか。",c:["申請不要で自動免除","出産予定月の前月から4か月間（多胎は前3か月から6か月間）が免除され、年金額計算には保険料を納付したものとして算入","免除期間は受給資格期間にのみ算入","所得制限がある"],a:1,year:"R5",law:"国年法第88条の2",warn:"産前産後免除（2019年4月〜）：①申請が必要②免除期間は保険料納付済期間として全額換算③国庫負担増加あり④出産日が確認できる書類を添付して申請。",tip:"「産前産後免除→申請必要・年金額に全額反映（満額）」"},
+{q:"「第3号被保険者の特例（3号特例）」として2009年4月以降の取扱いとして正しいものはどれか。",c:["届出忘れ期間は受給資格期間・年金額ともに算入されない","届出が遅れていても届出時点から2年前まで遡及適用可能（時効2年）","届出不要で自動算入","特例申出をすれば過去の未届期間も保険料納付済として算入可（平成25年7月以降）"],a:3,year:"R4",law:"国年法附則第7条の3",warn:"3号特例（H25年7月〜）：3号資格取得の届出漏れ期間について特例申出をすれば保険料納付済期間として算入可（時効廃止）。ただし悪意の場合・詐取防止の仕組みあり。",tip:"「3号届出漏れ→特例申出で過去分を救済（H25年7月〜）」"},
+{q:"「国民年金の保険料免除・猶予制度」の種類として正しい組合せはどれか。",c:["全額免除・一部免除の2種類のみ","全額・4分の3・半額・4分の1の一部免除・学生納付特例・納付猶予（若年者）","全額免除のみ","3段階の一部免除"],a:1,year:"R5",law:"国年法第90条〜90条の3",warn:"免除制度：全額免除・3/4免除・半額免除・1/4免除（一部免除3種）＋学生納付特例＋納付猶予（50歳未満）の計6種類。世帯全体の所得で審査（学生特例は本人のみ）。",tip:"「免除は6種類（全額＋一部3段階＋学生特例＋猶予）」"},
+{q:"「老齢基礎年金の受給権発生」について正しいものはどれか。",c:["65歳の誕生日","65歳の誕生日の前日（歳の数え方：誕生日前日が誕生日と同じ扱い）","受給申請日","60歳から任意に選択可"],a:1,year:"R4",law:"国年法第26条・民法第143条",warn:"年齢計算は誕生日の前日に達したとみなす（民法143条）。例：4月1日生まれの人は3月31日に65歳到達。年金は「受給権発生の翌月分から支給」。",tip:"「誕生日前日に年齢到達（民法）」→試験問題の罠"},
+{q:"「障害認定日」の原則として正しいものはどれか。",c:["初診日","初診日から1年6か月を経過した日（または症状固定日）","退院日","診断書を取得した日"],a:1,year:"R5",law:"国年法第30条第2項",warn:"障害認定日：初診日から1年6か月経過後（またはその前に症状固定した場合は固定日）。認定日に1・2級の障害状態であることが要件。認定日に請求できない場合の「事後重症」も重要。",tip:"「障害認定日→初診日から1年6か月後（または症状固定日）」"},
+{q:"「遺族基礎年金の支給停止」として正しいものはどれか。",c:["受給権者が再婚した場合は支給が減額される","受給権者である配偶者の所得が高い場合は支給停止","子のある配偶者が受給する場合、子が一定の状態になると支給停止（子のみに支給へ移行等）","受給開始から5年で支給停止"],a:2,year:"R4",law:"国年法第41条",warn:"遺族基礎年金の支給停止：①受給権者が婚姻した→失権②子が受給権者であっても生計維持がなくなれば失権。配偶者が受給中→子の分の加算は子に対して支給停止。複雑な失権・停止ルールに注意。",tip:"「遺族基礎年金→再婚で失権・子の状態変化で変動」"},
+{q:"「国民年金の保険料の口座振替・前納」について正しいものはどれか。",c:["口座振替しても割引なし","口座振替や前納（2年・1年・6か月・当月前納）により保険料が割引される","クレジットカード払いは不可","まとめ払いで割引なし"],a:1,year:"R5",law:"国年法第92条の2",warn:"割引制度：①口座振替（当月末振替）：50円/月割引②前納（口座振替）：2年前納で約15,000円割引が最大。現金前納も可（口座振替より割引額小）。クレジットカード前納も可。",tip:"「前納は2年が最大割引（約15,000円）」"},
+]
+};
+// ═══════════════════════════════════════════════
+// STORAGE HELPERS
+// ═══════════════════════════════════════════════
+const LS={
+  get:(k,d)=>{try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v);}catch{return d;}},
+  set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch{}},
+};
+const getStats=()=>LS.get('sr3_stats',{totalAns:0,totalOk:0,sessions:0,subjStats:{},history:[],studyDates:[]});
+const saveStats=s=>LS.set('sr3_stats',s);
+const getReview=()=>LS.get('sr3_review',[]);
+const saveReview=r=>LS.set('sr3_review',r);
+const getStreak=()=>LS.get('sr3_streak',{cur:0,best:0,lastDate:''});
+const saveStreak=s=>LS.set('sr3_streak',s);
+const getSettings=()=>LS.get('sr3_settings',{timer:true,exp:true,custom:true});
+const saveSettings=s=>LS.set('sr3_settings',s);
+const getCustomQ=()=>LS.get('sr3_custom',[]);
+const saveCustomQData=arr=>LS.set('sr3_custom',arr);
+
+function updateStreak(){
+  const today=new Date().toISOString().slice(0,10);
+  const s=getStreak();
+  if(s.lastDate===today)return s;
+  const yest=new Date(Date.now()-86400000).toISOString().slice(0,10);
+  s.cur=s.lastDate===yest?s.cur+1:1;
+  if(s.cur>s.best)s.best=s.cur;
+  s.lastDate=today;
+  saveStreak(s);
+  const stats=getStats();
+  if(!stats.studyDates.includes(today)){stats.studyDates.push(today);saveStats(stats);}
+  return s;
+}
+
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+
+function getAllQ(){
+  const settings=getSettings();
+  const custom=getCustomQ();
+  const base=JSON.parse(JSON.stringify(QDB_BASE));
+  if(settings.custom&&custom.length>0){
+    custom.forEach(q=>{
+      const subj=q.subj||'カスタム';
+      if(!base[subj])base[subj]=[];
+      base[subj].push({...q,_custom:true});
+    });
+  }
+  return base;
+}
+
+// ═══════════════════════════════════════════════
+// NAV
+// ═══════════════════════════════════════════════
+function showTab(t){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('active'));
+  const tabEl=document.getElementById('tab-'+t);
+  if(tabEl)tabEl.classList.add('active');
+  const nb=document.getElementById('nav-'+t);
+  if(nb)nb.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ═══════════════════════════════════════════════
+// HOME
+// ═══════════════════════════════════════════════
+const SMETA={
+  '労働基準法':{icon:'📋',c:'#2563eb'},
+  '労働安全衛生法':{icon:'⛑️',c:'#16a34a'},
+  '雇用保険法':{icon:'💼',c:'#7c3aed'},
+  '健康保険法':{icon:'🏥',c:'#dc2626'},
+  '国民年金法':{icon:'🏛️',c:'#d97706'},
+};
+
+function renderHome(){
+  const strk=getStreak();
+  document.getElementById('streak-num').textContent=strk.cur;
+  document.getElementById('streak-best').textContent='最高 '+strk.best+'日';
+
+  const review=getReview();
+  const rb=document.getElementById('review-btn-home');
+  if(review.length>0){
+    rb.style.display='flex';
+    document.getElementById('review-cnt-home').textContent=review.length+'問';
+  } else rb.style.display='none';
+
+  const stats=getStats();
+  const allQ=getAllQ();
+  const grid=document.getElementById('subj-grid');
+  grid.innerHTML='';
+
+  Object.keys(QDB_BASE).forEach(subj=>{
+    const ss=stats.subjStats[subj]||{ans:0,ok:0};
+    const pct=ss.ans>0?Math.round(ss.ok/ss.ans*100):null;
+    const meta=SMETA[subj]||{icon:'📚',c:'#888'};
+    const cls=pct===null?'':pct>=70?'pfill-high':pct>=50?'pfill-mid':'pfill-low';
+    const note=pct===null?allQ[subj].length+'問':pct+'% ('+ss.ans+'問)';
+    const d=document.createElement('div');
+    d.className='subj-card';d.dataset.subj=subj;
+    d.innerHTML=`<div class="subj-icon">${meta.icon}</div><div class="subj-name">${subj}</div><div class="subj-stat">${note}</div><div class="subj-pbar"><div class="subj-pfill ${cls}" style="width:${pct||0}%"></div></div>`;
+    d.onclick=()=>startQuiz(subj);
+    grid.appendChild(d);
+  });
+
+  document.getElementById('info-qcount').textContent=
+    Object.values(QDB_BASE).reduce((s,a)=>s+a.length,0)+'問（カスタム除く）';
+}
+
+// ═══════════════════════════════════════════════
+// QUIZ STATE
+// ═══════════════════════════════════════════════
+let QZ={qs:[],idx:0,score:0,subj:'',mode:'quiz',timer:null,tleft:30,answered:false,flags:new Set(),isReview:false};
+
+function startQuiz(subj){
+  const allQ=getAllQ();
+  const qs=shuffle(allQ[subj]);
+  QZ={qs:qs.slice(0,10),idx:0,score:0,subj,mode:'quiz',timer:null,tleft:30,answered:false,flags:new Set(),isReview:false};
+  updateStreak();
+  showTab('quiz');
+  renderQ();
+}
+
+function startReview(){
+  const r=getReview();
+  if(!r.length)return;
+  QZ={qs:shuffle(r),idx:0,score:0,subj:'復習',mode:'quiz',timer:null,tleft:30,answered:false,flags:new Set(),isReview:true};
+  updateStreak();
+  showTab('quiz');
+  renderQ();
+}
+
+// ═══════════════════════════════════════════════
+// QUICK MODE
+// ═══════════════════════════════════════════════
+function startQuick(){
+  const allQ=getAllQ();
+  const allArr=[];
+  Object.keys(allQ).forEach(s=>allQ[s].forEach(q=>allArr.push({...q,_subj:s})));
+  const q=shuffle(allArr)[0];
+  QZ={qs:[q],idx:0,score:0,subj:'暇問',mode:'quick',timer:null,tleft:30,answered:false,flags:new Set(),isReview:false};
+  updateStreak();
+  // Render quick quiz into tab-quiz
+  showTab('quiz');
+  const LBLS=['A','B','C','D'];
+  const settings=getSettings();
+  let timerHTML=settings.timer?`<div class="timer-wrap">
+    <div class="timer-top"><span>残り時間</span><span id="qk-tsec">30秒</span></div>
+    <div class="timer-bar-bg"><div class="timer-bar" id="qk-tbar" style="width:100%"></div></div>
+  </div>`:'';
+  let choicesHTML='';
+  q.c.forEach((ch,i)=>{choicesHTML+=`<button class="choice" onclick="answerQuick(${i})"><span class="choice-lbl">${LBLS[i]}</span><span>${ch}</span></button>`;});
+  document.getElementById('tab-quiz').innerHTML=`
+    <div style="padding-top:16px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+        <span style="font-size:20px">⚡</span>
+        <span style="font-size:15px;font-weight:700;color:var(--text)">暇問モード</span>
+        <span class="tag tag-blue">${q._subj||'全科目'}</span>
+        ${q._custom?'<span class="tag tag-custom">カスタム</span>':''}
+      </div>
+      ${timerHTML}
+      <div class="q-card">
+        ${q.year?`<span class="q-year-badge">${q.year}</span>`:''}
+        <div class="q-text">${q.q}</div>
+      </div>
+      <div class="choices" id="qk-choices">${choicesHTML}</div>
+      <div id="qk-exp"></div>
+      <div id="qk-next"></div>
+    </div>`;
+  if(settings.timer)startTimer('qk');
+}
+
+function answerQuick(idx){
+  if(QZ.answered)return;
+  QZ.answered=true;stopTimer();
+  const q=QZ.qs[0];
+  const ok=idx===q.a;
+  if(ok)QZ.score=1;
+  recordAns(q,ok,q._subj||QZ.subj);
+  showChoiceResult('qk-choices',q.a,idx);
+  if(getSettings().exp){
+    const expEl=document.getElementById('qk-exp');
+    if(expEl)expEl.innerHTML=buildExp(q,ok);
+  }
+  const nxtEl=document.getElementById('qk-next');
+  if(nxtEl)nxtEl.innerHTML=`<button class="btn-next" style="margin-top:8px" onclick="startQuick()">▶ もう1問</button>`;
+  if(!ok)addReview(q);
+  if(ok&&QZ.isReview)removeReview(q);
+}
+
+// ═══════════════════════════════════════════════
+// QUIZ RENDER
+// ═══════════════════════════════════════════════
+function renderQ(){
+  const q=QZ.qs[QZ.idx];
+  const total=QZ.qs.length;
+  const pct=QZ.idx/total*100;
+  const settings=getSettings();
+  const LBLS=['A','B','C','D'];
+  QZ.answered=false;
+  const flagged=QZ.flags.has(QZ.idx);
+
+  document.getElementById('tab-quiz').innerHTML=`
+    <div style="padding-top:16px">
+      <div class="qz-header">
+        <span class="qz-meta">${QZ.subj} &nbsp;${QZ.idx+1}/${total}</span>
+        <button class="qz-flag-btn ${flagged?'flagged':''}" id="flag-btn" onclick="toggleFlag()">
+          ${flagged?'🚩 要確認':'⬜ 見直し'}
+        </button>
+      </div>
+      <div class="prog-outer"><div class="prog-inner" style="width:${pct}%"></div></div>
+      ${settings.timer?`<div class="timer-wrap">
+        <div class="timer-top"><span>残り時間</span><span id="qz-tsec">30秒</span></div>
+        <div class="timer-bar-bg"><div class="timer-bar" id="qz-tbar" style="width:100%"></div></div>
+      </div>`:''}
+      <div class="q-card">
+        <div>
+          ${q.year?`<span class="q-year-badge">${q.year}</span>`:''}
+          ${q._custom?`<span class="tag tag-custom" style="margin-left:4px;vertical-align:middle">カスタム</span>`:''}
+        </div>
+        <div class="q-text" id="q-text">${q.q}</div>
+      </div>
+      <div class="choices" id="qz-choices">
+        ${q.c.map((ch,i)=>`<button class="choice" onclick="answerQ(${i})"><span class="choice-lbl">${LBLS[i]}</span><span>${ch}</span></button>`).join('')}
+      </div>
+      <div id="qz-exp"></div>
+      <button id="btn-next" class="btn-next" style="display:none" onclick="nextQ()"></button>
+    </div>`;
+  if(settings.timer)startTimer('qz');
+}
+
+function answerQ(idx){
+  if(QZ.answered)return;
+  QZ.answered=true;stopTimer();
+  const q=QZ.qs[QZ.idx];
+  const ok=idx===q.a;
+  if(ok)QZ.score++;
+  recordAns(q,ok,QZ.subj==='復習'?q._subj||'復習':QZ.subj);
+  showChoiceResult('qz-choices',q.a,idx);
+  if(getSettings().exp){
+    const expEl=document.getElementById('qz-exp');
+    if(expEl)expEl.innerHTML=buildExp(q,ok);
+  }
+  const nb=document.getElementById('btn-next');
+  if(nb){nb.style.display='block';nb.textContent=QZ.idx+1<QZ.qs.length?'次の問題 →':'結果を見る';}
+  if(!ok&&!QZ.isReview)addReview(q);
+  if(ok&&QZ.isReview)removeReview(q);
+}
+
+function toggleFlag(){
+  if(QZ.flags.has(QZ.idx))QZ.flags.delete(QZ.idx);else QZ.flags.add(QZ.idx);
+  const btn=document.getElementById('flag-btn');
+  if(btn){btn.className='qz-flag-btn'+(QZ.flags.has(QZ.idx)?' flagged':'');btn.textContent=QZ.flags.has(QZ.idx)?'🚩 要確認':'⬜ 見直し';}
+}
+
+function nextQ(){
+  QZ.idx++;
+  if(QZ.idx<QZ.qs.length)renderQ();else showResult();
+}
+
+function showChoiceResult(cid,correct,chosen){
+  const btns=document.querySelectorAll('#'+cid+' .choice');
+  btns.forEach((b,i)=>{b.disabled=true;if(i===correct)b.classList.add('correct');if(i===chosen&&chosen!==correct)b.classList.add('wrong');});
+  if(chosen===correct){const ri=document.createElement('div');ri.className='result-icon';ri.textContent='✅';btns[correct].insertAdjacentElement('beforebegin',ri);}
+  else if(chosen>=0){const ri=document.createElement('div');ri.className='result-icon';ri.textContent='❌';btns[chosen].insertAdjacentElement('beforebegin',ri);}
+}
+
+function buildExp(q,ok){
+  return `<div class="exp-box ${ok?'correct':'wrong'}">
+    <div class="exp-head ${ok?'correct':'wrong'}">${ok?'✓ 正解！':'✗ 不正解'}</div>
+    ${q.law?`<span class="exp-law">📖 ${q.law}</span>`:''}
+    <div style="color:var(--text);line-height:1.75;margin-top:6px">${q.exp||''}</div>
+    ${q.warn?`<div class="exp-warn">⚠️ <strong>間違えやすいポイント：</strong>${q.warn}</div>`:''}
+    ${q.tip?`<div class="exp-tip">💡 <strong>覚え方のコツ：</strong>${q.tip}</div>`:''}
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════
+// RESULT
+// ═══════════════════════════════════════════════
+function showResult(){
+  stopTimer();
+  const total=QZ.qs.length;
+  const pct=Math.round(QZ.score/total*100);
+  const grade=pct>=80?'🎉':pct>=60?'👍':'📚';
+  const msg=pct>=80?'合格ラインを超えています！':pct>=60?'あと少し！苦手問題を復習しよう':'復習リストを活用して弱点克服！';
+
+  const stats=getStats();
+  stats.history.push({date:new Date().toISOString().slice(0,10),pct,subj:QZ.subj});
+  if(stats.history.length>14)stats.history=stats.history.slice(-14);
+  stats.sessions++;
+  saveStats(stats);
+
+  const review=getReview();
+  const flagList=QZ.flags.size>0?[...QZ.flags].map(i=>QZ.qs[i]):[];
+
+  // Build flag list block separately
+  let flagBlock='';
+  if(flagList.length>0){
+    let flagItems='';
+    flagList.forEach((q,i)=>{flagItems+=`<div style="font-size:12px;color:var(--text2);padding:6px 0;border-bottom:1px solid var(--border)">${i+1}. ${q.q.slice(0,40)}…</div>`;});
+    flagBlock=`<div class="card" style="margin-top:10px">
+      <div style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:8px">🚩 見直しフラグ (${flagList.length}問)</div>
+      ${flagItems}
+    </div>`;
+  }
+
+  const reviewBlock=review.length>0&&!QZ.isReview
+    ?`<div style="display:flex;align-items:center;justify-content:space-between;background:var(--amber-bg);border:1px solid var(--amber-light);border-radius:var(--r-sm);padding:10px 14px;margin-top:10px">
+        <span style="font-size:13px;color:var(--amber)">📌 復習リスト: ${review.length}問</span>
+        <button onclick="startReview()" style="font-size:12px;color:var(--amber);background:var(--bg2);border:1px solid var(--amber);border-radius:6px;padding:4px 10px;cursor:pointer">復習する</button>
+      </div>`
+    :'';
+
+  const retryBtn=!QZ.isReview&&QZ.subj!=='暇問'
+    ?`<button class="btn-next" onclick="startQuiz('${QZ.subj}')">同じ科目をもう一度</button>`
+    :'';
+
+  document.getElementById('tab-quiz').innerHTML=`
+    <div style="padding-top:16px">
+      <div class="card result-hero">
+        <div class="rh-grade">${grade}</div>
+        <div><span class="rh-score">${QZ.score}</span><span class="rh-denom"> / ${total}</span></div>
+        <div class="rh-pct">正解率 ${pct}%</div>
+        <div class="rh-msg" style="margin-top:8px">${msg}</div>
+      </div>
+      ${flagBlock}
+      ${reviewBlock}
+      <div class="result-actions">
+        ${retryBtn}
+        <button class="btn-outline" onclick="showTab('home');renderHome()">ホームへ</button>
+        <button class="btn-outline" onclick="showTab('stats');renderStats()">結果を分析する</button>
+      </div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════
+// EXAM MODE
+// ═══════════════════════════════════════════════
+let EX={qs:[],idx:0,answers:[],flags:new Set(),timer:null,tleft:210*60};
+
+function startExam(){
+  if(!confirm('模擬試験を開始しますか？\n70問・制限時間210分（3時間30分）\n\n一度始めると中断できません。'))return;
+  const allQ=getAllQ();
+  const pool=[];
+  Object.keys(QDB_BASE).forEach(s=>{
+    const qs=shuffle(allQ[s]);
+    pool.push(...qs.slice(0,14).map(q=>({...q,_subj:s})));
+  });
+  EX={qs:shuffle(pool).slice(0,70),idx:0,answers:new Array(70).fill(-1),flags:new Set(),timer:null,tleft:210*60};
+  updateStreak();
+  showTab('quiz');
+  renderExam();
+}
+
+function renderExam(){
+  const q=EX.qs[EX.idx];
+  const LBLS=['A','B','C','D'];
+  const mins=Math.floor(EX.tleft/60),secs=EX.tleft%60;
+  const timerCls=EX.tleft<600?'exam-timer danger':EX.tleft<1800?'exam-timer warn':'exam-timer';
+  const answeredCount=EX.answers.filter(a=>a>=0).length;
+  const progPct=answeredCount/70*100;
+
+  // Build exam map separately to avoid nested template literal
+  let mapHTML='';
+  for(let i=0;i<EX.qs.length;i++){
+    const cls=i===EX.idx?'current':EX.flags.has(i)?'flagged':EX.answers[i]>=0?'answered':'';
+    mapHTML+=`<div class="exam-map-dot ${cls}" onclick="jumpExam(${i})">${i+1}</div>`;
+  }
+
+  // Build choices separately
+  let choicesHTML='';
+  q.c.forEach((ch,i)=>{
+    const sel=EX.answers[EX.idx]===i;
+    choicesHTML+=`<button class="choice${sel?' correct':''}" onclick="chooseExam(${i})" style="${sel?'border-color:var(--blue);background:var(--blue-bg)':''}"><span class="choice-lbl">${LBLS[i]}</span><span>${ch}</span></button>`;
+  });
+
+  const prevBtn=EX.idx>0?`<button class="btn-outline" style="flex:1" onclick="prevExam()">← 前の問題</button>`:`<div style="flex:1"></div>`;
+  const nextBtn=EX.idx<EX.qs.length-1
+    ?`<button class="btn-next" style="flex:1" onclick="nextExam()">次の問題 →</button>`
+    :`<button class="btn-next" style="flex:1;background:var(--red)" onclick="finishExam()">試験を終了</button>`;
+
+  document.getElementById('tab-quiz').innerHTML=`
+    <div>
+      <div class="exam-nav">
+        <div class="${timerCls}" id="ex-timer">${mins}:${String(secs).padStart(2,'0')}</div>
+        <div class="exam-prog-wrap">
+          <div class="exam-prog-label">${EX.idx+1}/70問 (回答済: ${answeredCount})</div>
+          <div class="prog-outer" style="margin:0"><div class="prog-inner" style="width:${progPct}%"></div></div>
+        </div>
+      </div>
+      <div style="padding-top:12px">
+        <div class="sec-h">問題マップ</div>
+        <div class="exam-map">${mapHTML}</div>
+        <div class="qz-header" style="margin-top:12px">
+          <span class="qz-meta">${EX.idx+1}問目 — ${q._subj||''}</span>
+          <button class="qz-flag-btn ${EX.flags.has(EX.idx)?'flagged':''}" onclick="flagExam()">
+            ${EX.flags.has(EX.idx)?'🚩 要確認':'⬜ 見直し'}
+          </button>
+        </div>
+        <div class="q-card" style="margin-top:8px">
+          ${q.year?`<span class="q-year-badge">${q.year}</span>`:''}
+          <div class="q-text">${q.q}</div>
+        </div>
+        <div class="choices">${choicesHTML}</div>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          ${prevBtn}${nextBtn}
+        </div>
+      </div>
+    </div>`;
+  startExamTimer();
+}
+
+function startExamTimer(){
+  if(EX.timer)clearInterval(EX.timer);
+  EX.timer=setInterval(()=>{
+    EX.tleft--;
+    const t=document.getElementById('ex-timer');
+    if(!t){clearInterval(EX.timer);return;}
+    const m=Math.floor(EX.tleft/60),s=EX.tleft%60;
+    t.textContent=m+':'+String(s).padStart(2,'0');
+    t.className=EX.tleft<600?'exam-timer danger':EX.tleft<1800?'exam-timer warn':'exam-timer';
+    if(EX.tleft<=0){clearInterval(EX.timer);alert('時間終了です。採点します。');finishExam();}
+  },1000);
+}
+
+function chooseExam(idx){EX.answers[EX.idx]=idx;renderExam();}
+function flagExam(){if(EX.flags.has(EX.idx))EX.flags.delete(EX.idx);else EX.flags.add(EX.idx);renderExam();}
+function jumpExam(i){EX.idx=i;renderExam();}
+function nextExam(){if(EX.idx<69){EX.idx++;renderExam();}}
+function prevExam(){if(EX.idx>0){EX.idx--;renderExam();}}
+
+function finishExam(){
+  if(EX.timer)clearInterval(EX.timer);
+  let total=0,bySubj={};
+  EX.qs.forEach((q,i)=>{
+    const ok=EX.answers[i]===q.a;
+    if(ok)total++;
+    const s=q._subj||'その他';
+    if(!bySubj[s])bySubj[s]={ok:0,all:0};
+    bySubj[s].all++;if(ok)bySubj[s].ok++;
+  });
+  const pct=Math.round(total/70*100);
+  const pass=total>=35;
+  const weakSubj=Object.keys(bySubj).filter(s=>Math.round(bySubj[s].ok/bySubj[s].all*100)<50);
+
+  const stats=getStats();
+  stats.history.push({date:new Date().toISOString().slice(0,10),pct,subj:'模擬試験'});
+  stats.sessions++;
+  if(stats.history.length>14)stats.history=stats.history.slice(-14);
+  saveStats(stats);
+
+  // Build subject bars separately to avoid nested template literals
+  let subjBarsHTML='';
+  Object.keys(bySubj).forEach(s=>{
+    const p=Math.round(bySubj[s].ok/bySubj[s].all*100);
+    const cls=p>=70?'high':p>=50?'mid':'low';
+    const icon=(SMETA[s]||{icon:'📚'}).icon;
+    const badge=p<50?'<span class="srb-badge">要復習</span>':'';
+    subjBarsHTML+=`<div class="srb-row">
+      <div class="srb-label">${icon} ${s.replace('法','')}</div>
+      <div class="srb-track"><div class="srb-fill ${cls}" style="width:${p}%"><span class="srb-pct">${bySubj[s].ok}/${bySubj[s].all}</span></div></div>
+      ${badge}
+    </div>`;
+  });
+
+  const weakBlock=weakSubj.length>0
+    ?`<div style="background:var(--red-bg);border:1px solid var(--red-light);border-radius:var(--r-sm);padding:12px;margin-top:10px">
+        <div style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:6px">⚠️ 重点復習が必要な科目</div>
+        <div style="font-size:13px;color:var(--text)">${weakSubj.join('、')}</div>
+      </div>`
+    :'';
+
+  const judgeBg=pass?'var(--green-bg)':'var(--red-bg)';
+  const judgeColor=pass?'var(--green)':'var(--red)';
+  const judgeBorder=pass?'var(--green-light)':'var(--red-light)';
+  const judgeText=pass?'合格ライン達成':'不合格ライン';
+  const resultMsg=pass?'すべての科目でバランスよく得点できました！':'苦手科目を重点的に復習しましょう。';
+
+  document.getElementById('tab-quiz').innerHTML=`
+    <div style="padding-top:16px">
+      <div class="card result-hero">
+        <div class="rh-grade">${pass?'🎉':'📚'}</div>
+        <div><span class="rh-score">${total}</span><span class="rh-denom"> / 70</span></div>
+        <div class="rh-pct">正解率 ${pct}%</div>
+        <div style="margin-top:12px;display:inline-block;padding:8px 20px;border-radius:20px;font-size:16px;font-weight:800;background:${judgeBg};color:${judgeColor};border:1px solid ${judgeBorder}">${judgeText}</div>
+        <div class="rh-msg" style="margin-top:8px">${resultMsg}</div>
+      </div>
+      <div class="card" style="margin-top:10px">
+        <div style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:12px">科目別結果</div>
+        <div class="subj-result-bars">${subjBarsHTML}</div>
+      </div>
+      ${weakBlock}
+      <div class="result-actions" style="margin-top:12px">
+        <button class="btn-outline" onclick="showTab('home');renderHome()">ホームへ</button>
+      </div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════
+// TIMER
+// ═══════════════════════════════════════════════
+function startTimer(pfx){
+  QZ.tleft=30;
+  if(QZ.timer)clearInterval(QZ.timer);
+  QZ.timer=setInterval(()=>{
+    QZ.tleft--;
+    const p=QZ.tleft/30*100;
+    const bar=document.getElementById(pfx+'-tbar');
+    const sec=document.getElementById(pfx+'-tsec');
+    if(!bar||!sec){clearInterval(QZ.timer);return;}
+    bar.style.width=p+'%';
+    bar.className='timer-bar'+(QZ.tleft<=10?' danger':QZ.tleft<=20?' warn':'');
+    sec.textContent=QZ.tleft+'秒';
+    if(QZ.tleft<=0){
+      clearInterval(QZ.timer);
+      if(!QZ.answered){
+        if(pfx==='qk')answerQuick(-1);else answerQ(-1);
+      }
+    }
+  },1000);
+}
+function stopTimer(){if(QZ.timer){clearInterval(QZ.timer);QZ.timer=null;}}
+
+// ═══════════════════════════════════════════════
+// RECORD
+// ═══════════════════════════════════════════════
+function recordAns(q,ok,subj){
+  const stats=getStats();
+  stats.totalAns++;if(ok)stats.totalOk++;
+  if(!stats.subjStats[subj])stats.subjStats[subj]={ans:0,ok:0};
+  stats.subjStats[subj].ans++;if(ok)stats.subjStats[subj].ok++;
+  saveStats(stats);
+}
+function addReview(q){const r=getReview();if(!r.some(x=>x.q===q.q)){r.push(q);saveReview(r);}}
+function removeReview(q){saveReview(getReview().filter(x=>x.q!==q.q));}
+
+// ═══════════════════════════════════════════════
+// STATS
+// ═══════════════════════════════════════════════
+function renderStats(){
+  const stats=getStats();
+  const strk=getStreak();
+  const pct=stats.totalAns>0?Math.round(stats.totalOk/stats.totalAns*100):0;
+  document.getElementById('st-total').textContent=stats.totalAns;
+  document.getElementById('st-pct').textContent=pct+'%';
+  document.getElementById('st-streak').textContent=strk.cur;
+
+  const bc=document.getElementById('subj-chart');
+  bc.innerHTML='';
+  Object.keys(QDB_BASE).forEach(subj=>{
+    const ss=stats.subjStats[subj]||{ans:0,ok:0};
+    const p=ss.ans>0?Math.round(ss.ok/ss.ans*100):null;
+    const cls=p===null?'':p>=70?'high':p>=50?'mid':'low';
+    const m=SMETA[subj]||{icon:'📚'};
+    bc.innerHTML+=`<div class="chart-row">
+      <div class="cr-label">${m.icon} ${subj.replace('法','').replace('衛生','安衛')}</div>
+      <div class="cr-track"><div class="cr-fill ${cls}" style="width:${p||0}%">${p!==null?`<span class="cr-pct">${p}%</span>`:''}</div></div>
+      ${p!==null&&p<60?'<span class="cr-badge">要復習</span>':''}
+    </div>`;
+  });
+
+  const hb=document.getElementById('hist-bars');
+  const hl=document.getElementById('hist-labels');
+  hb.innerHTML='';hl.innerHTML='';
+  const h=stats.history.slice(-14);
+  if(!h.length){hb.innerHTML='<span style="font-size:12px;color:var(--text3)">記録なし</span>';return;}
+  h.forEach(item=>{
+    const bar=document.createElement('div');
+    bar.className='hist-bar';
+    bar.style.height=Math.max(item.pct,3)+'%';
+    bar.style.background=item.pct>=70?'var(--green)':item.pct>=50?'var(--amber)':'var(--red)';
+    bar.title=item.date+' '+item.pct+'%';
+    hb.appendChild(bar);
+    const lbl=document.createElement('div');
+    lbl.className='hist-lbl';lbl.textContent=item.date.slice(5);
+    hl.appendChild(lbl);
+  });
+
+  // Calendar
+  const cal=document.getElementById('cal-grid');
+  cal.innerHTML='';
+  const now=new Date();
+  for(let i=27;i>=0;i--){
+    const d=new Date(now.getTime()-i*86400000).toISOString().slice(0,10);
+    const studied=stats.studyDates.includes(d);
+    const pctDay=studied?stats.history.filter(h=>h.date===d).reduce((acc,h,_,arr)=>acc+h.pct/arr.length,0):0;
+    const div=document.createElement('div');
+    div.className='cal-day'+(studied?pctDay>=70?' studied great':' studied':'');
+    div.title=d+(studied?' 学習済':'');
+    cal.appendChild(div);
+  }
+}
+
+// ═══════════════════════════════════════════════
+// QUESTION MANAGER
+// ═══════════════════════════════════════════════
+function renderQManager(){
+  const custom=getCustomQ();
+  const wrap=document.getElementById('qm-list-wrap');
+  if(!custom.length){
+    wrap.innerHTML=`<div class="empty-state"><div class="empty-icon">📝</div><div>カスタム問題がありません</div><div style="font-size:12px;margin-top:4px">「問題を追加」から自作問題を登録できます</div></div>`;
+    return;
+  }
+  wrap.innerHTML=`<div class="qm-list">${custom.map((q,i)=>`
+    <div class="qm-item">
+      <div class="qm-item-body">
+        <div class="qm-item-q">${q.q}</div>
+        <div class="qm-item-meta"><span class="tag tag-blue">${q.subj||'カスタム'}</span>&nbsp;正解: ${['A','B','C','D'][q.a]}</div>
+      </div>
+      <div class="qm-item-actions">
+        <button class="btn-icon" onclick="editCustomQ(${i})">✏️</button>
+        <button class="btn-icon" onclick="deleteCustomQ(${i})" style="color:var(--red)">🗑️</button>
+      </div>
+    </div>`).join('')}</div>`;
+}
+
+let editIdx=-1;
+function openAddModal(idx=-1){
+  editIdx=idx;
+  const custom=getCustomQ();
+  const q=idx>=0?custom[idx]:{q:'',c:['','','',''],a:0,subj:'労働基準法',exp:'',law:'',warn:'',tip:''};
+  document.getElementById('modal-title-text').textContent=idx>=0?'問題を編集':'問題を追加';
+  document.getElementById('modal-content').innerHTML=`
+    <div class="form-group">
+      <label class="form-label">科目</label>
+      <select class="form-select" id="f-subj">
+        ${Object.keys(QDB_BASE).map(s=>`<option value="${s}"${q.subj===s?' selected':''}>${s}</option>`).join('')}
+        <option value="カスタム"${q.subj==='カスタム'?' selected':''}>カスタム</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">問題文 *</label>
+      <textarea class="form-textarea" id="f-q" placeholder="問題文を入力...">${q.q}</textarea>
+    </div>
+    ${[0,1,2,3].map(i=>`<div class="form-group">
+      <label class="form-label">選択肢 ${['A','B','C','D'][i]} ${i===0?'*':''}</label>
+      <input class="form-input" id="f-c${i}" placeholder="選択肢${['A','B','C','D'][i]}" value="${q.c[i]||''}">
+    </div>`).join('')}
+    <div class="form-group">
+      <label class="form-label">正解 *</label>
+      <select class="form-select" id="f-a">
+        ${['A（0）','B（1）','C（2）','D（3）'].map((l,i)=>`<option value="${i}"${q.a===i?' selected':''}>${l}</option>`).join('')}
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">解説</label>
+      <textarea class="form-textarea" id="f-exp" placeholder="解説を入力...">${q.exp||''}</textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">関連条文</label>
+        <input class="form-input" id="f-law" placeholder="例：労基法第32条" value="${q.law||''}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">覚え方のコツ</label>
+        <input class="form-input" id="f-tip" placeholder="語呂合わせ等" value="${q.tip||''}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">⚠️ 間違えやすいポイント</label>
+      <textarea class="form-textarea" style="min-height:60px" id="f-warn" placeholder="注意点を入力...">${q.warn||''}</textarea>
+    </div>
+    <button class="btn-next" onclick="saveCustomQ()">保存する</button>
+  `;
+  document.getElementById('modal-backdrop').style.display='flex';
+}
+
+function saveCustomQ(){
+  const q={
+    q:document.getElementById('f-q').value.trim(),
+    c:[0,1,2,3].map(i=>document.getElementById('f-c'+i).value.trim()),
+    a:parseInt(document.getElementById('f-a').value),
+    subj:document.getElementById('f-subj').value,
+    exp:document.getElementById('f-exp').value.trim(),
+    law:document.getElementById('f-law').value.trim(),
+    tip:document.getElementById('f-tip').value.trim(),
+    warn:document.getElementById('f-warn').value.trim(),
+    _custom:true,
+  };
+  if(!q.q){alert('問題文を入力してください');return;}
+  if(!q.c[0]){alert('選択肢Aを入力してください');return;}
+  const custom=getCustomQ();
+  if(editIdx>=0)custom[editIdx]=q;else custom.push(q);
+  saveCustomQData(custom);
+  closeModal();
+  renderQManager();
+}
+
+function editCustomQ(idx){openAddModal(idx);}
+function deleteCustomQ(idx){
+  if(!confirm('この問題を削除しますか？'))return;
+  const custom=getCustomQ();
+  custom.splice(idx,1);
+  saveCustomQData(custom);
+  renderQManager();
+}
+
+function exportJSON(){
+  const custom=getCustomQ();
+  const data={version:'3.0',exported:new Date().toISOString(),questions:custom};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='sharoshi_custom_questions.json';a.click();
+}
+
+function importJSON(e){
+  const file=e.target.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    try{
+      const data=JSON.parse(ev.target.result);
+      const qs=data.questions||data;
+      if(!Array.isArray(qs))throw new Error('形式エラー');
+      const custom=getCustomQ();
+      let added=0;
+      qs.forEach(q=>{
+        if(q.q&&q.c&&Array.isArray(q.c)&&typeof q.a==='number'){custom.push({...q,_custom:true});added++;}
+      });
+      saveCustomQData(custom);
+      alert(added+'問をインポートしました！');
+      renderQManager();
+    }catch{alert('JSONの形式が正しくありません');}
+  };
+  r.readAsText(file);
+  e.target.value='';
+}
+
+// ═══════════════════════════════════════════════
+// SETTINGS
+// ═══════════════════════════════════════════════
+function toggleSetting(key,el){
+  const s=getSettings();
+  s[key]=!s[key];
+  saveSettings(s);
+  el.className='toggle'+(s[key]?' on':'');
+}
+function loadSettings(){
+  const s=getSettings();
+  ['timer','exp','custom'].forEach(k=>{
+    const el=document.getElementById('tog-'+k);
+    if(el)el.className='toggle'+(s[k]?' on':'');
+  });
+}
+function resetStats(){if(confirm('学習データをリセットしますか？')){LS.set('sr3_stats',{totalAns:0,totalOk:0,sessions:0,subjStats:{},history:[],studyDates:[]});alert('リセットしました');renderHome();}}
+function clearReview(){if(confirm('復習リストをクリアしますか？')){saveReview([]);renderHome();}}
+
+// ═══════════════════════════════════════════════
+// MODAL
+// ═══════════════════════════════════════════════
+function closeModal(){document.getElementById('modal-backdrop').style.display='none';}
+function closeModalBackdrop(e){if(e.target===document.getElementById('modal-backdrop'))closeModal();}
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+renderHome();
+loadSettings();
+</script>
+</body>
+</html>
